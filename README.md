@@ -8,7 +8,7 @@ A repository of python scripts written to make using funtions in I-Simpa easier
 Each folder contains the required files to run the tools within I-Simpa 1.3.4 with the Python 3.8 Interperator. 
 **Administrator controls are required to install any of these tools**
 
-1. Download the desired tools
+1. Download the desired tools by pressing the "Code" button at the top of the screen and then "Download ZIP"
 2. Open the I-Simpa folder usually located at C:\Program Files\I-SIMPA\UserScript
 3. Paste the tool folder into the user script folder **Note:** recp_res_tool goes into the ..\I-SIMPA\SystemScript folder and replaces the one already contained within.
 4. Reboot any open instances of I-Simpa 
