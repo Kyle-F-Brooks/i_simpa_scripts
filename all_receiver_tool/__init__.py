@@ -14,7 +14,7 @@ class manager:
         submenu.append((u"Enable Names", self.enable_reciever_namesid))
         submenu.append((u"Disable Names", self.disable_reciever_namesid))
         menu.insert(2,(u"Reciever Names", submenu))
-        menu.insert(3,(u"Remove Directivity Line", self.disable_direc_dispid))
+        menu.insert(3,(u"Remove Directivity Lines", self.disable_direc_dispid))
         return True
 
     def enable_reciever_names(self, idgrp):
