@@ -10,8 +10,7 @@ Each folder contains the required files to run the tools within I-Simpa 1.3.4 wi
 
 1. Download the desired tools
 2. Open the I-Simpa folder usually located at C:\Program Files\I-SIMPA\UserScript
-3. Paste the tool folder into the user script folder
-  * **Note:** recp_res_tool goes into the ..\I-SIMPA\SystemScript folder and replaces the one already contained within.
+3. Paste the tool folder into the user script folder **Note:** recp_res_tool goes into the ..\I-SIMPA\SystemScript folder and replaces the one already contained within.
 4. Reboot any open instances of I-Simpa 
 
 ## all_reciever_tool
@@ -22,7 +21,8 @@ Directivity Lines can now be hidden but not re-enabled.
 An edited version of a script that converts the gabe format files into csv. The changes made allow it to be used with python 3 as in the latest version of I-Simpa. 
 
 ## recp_res_tool
-Combines each value of a chosen measurement into a single file to allow for easier processing of data. Each file gets saved in a folder called "Fused Recievers" and the file name is appended with the measurement that was chosen. 
+Combines each value of a chosen measurement into a single file to allow for easier processing of data. Each file gets saved in a folder called "Fused Recievers" and the file name is appended with the measurement that was chosen. The alterations from python 2 -> 3 mean that this doesn't currently work on install alone. modifications are needed to be made to other files
+*will update when back at pc* 
 
 ## test_python 
 currently under development.
