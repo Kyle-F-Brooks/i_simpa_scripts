@@ -27,4 +27,6 @@ class manager:
         for prop in all_property:
             ui.element(prop).updateboolconfig("showlabel",newstate)
 
+# Directivity Line can be removed by setting reciever properties -> direction x,y,z to 0
+
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_RECEPTEURSP, manager())
