@@ -3,19 +3,23 @@
 # Modified:20/12/21
 
 import uictrl as ui
+
 def set_direc_display(idgrp):
-        grpsrc=ui.element(idgrp)
-        all_property=grpsrc.getallelementbytype(ui.element_type.ELEMENT_TYPE_SCENE_RECEPTEURSP_RECEPTEUR_PROPRIETES) 
-        for prop in all_property:
-            ui.element(prop).updatedecimalconfig("u",0)
-            ui.element(prop).updatedecimalconfig("v",0)
-            ui.element(prop).updatedecimalconfig("w",0)
+    # Sets the directivity bar to zero meaning it no longer shows. Cannot toggle it back on
+    grpsrc=ui.element(idgrp)
+    all_property=grpsrc.getallelementbytype(ui.element_type.ELEMENT_TYPE_SCENE_RECEPTEURSP_RECEPTEUR_PROPRIETES) 
+    for prop in all_property:
+        # edits "Direction X", "Direction Y" & "Direction Z"
+        ui.element(prop).updatedecimalconfig("u",0) #X
+        ui.element(prop).updatedecimalconfig("v",0) #Y
+        ui.element(prop).updatedecimalconfig("w",0) #Z
 
 def set_reciever_activation(idgrp,newstate):
-        grpsrc=ui.element(idgrp)
-        all_property=grpsrc.getallelementbytype(ui.element_type.ELEMENT_TYPE_SCENE_RECEPTEURSP_RECEPTEUR_RENDU) 
-        for prop in all_property:
-            ui.element(prop).updateboolconfig("showlabel",newstate)
+    # depending on input, will show or hide the name label
+    grpsrc=ui.element(idgrp)
+    all_property=grpsrc.getallelementbytype(ui.element_type.ELEMENT_TYPE_SCENE_RECEPTEURSP_RECEPTEUR_RENDU) 
+    for prop in all_property:
+        ui.element(prop).updateboolconfig("showlabel",newstate)
 
 class manager:
     def __init__(self):

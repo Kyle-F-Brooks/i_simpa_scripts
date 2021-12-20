@@ -8,6 +8,7 @@ import os
 
 
 def GetMixedLevel(folderwxid, target):
+    # target refers to the measurement type desired for output
     cols=[]
     folder=ui.element(folderwxid)
     recplist=folder.getallelementbytype(ui.element_type.ELEMENT_TYPE_REPORT_GABE_RECP)
