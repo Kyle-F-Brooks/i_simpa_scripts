@@ -16,8 +16,7 @@ Each folder contains the required files to run the tools within I-Simpa 1.3.4 wi
 
 ## all_reciever_tool
 This tool is used to enable and disable the name tags on each punctual reciever to make viewing of the model easier.
-### Planned Changes
-* Removable Directivity Lines
+Directivity Lines can now be hidden but not re-enabled.
 
 ## convert_all_tool
 An edited version of a script that converts the gabe format files into csv. The changes made allow it to be used with python 3 as in the latest version of I-Simpa. 
