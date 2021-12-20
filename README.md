@@ -21,9 +21,9 @@ Directivity Lines can now be hidden but not re-enabled.
 An edited version of a script that converts the gabe format files into csv. The changes made, allow it to be used with python 3 as in the latest version of I-Simpa. 
 
 ## recp_res_tool
-Combines each value of a chosen measurement into a single file to allow for easier processing of data. Each file gets saved in a folder called "Fused Recievers" and the file name is appended with the measurement that was chosen. The alterations from python 2 -> 3 mean that this doesn't currently work on install alone. modifications are needed to be made to other files
+Combines each value of a chosen measurement into a single file to allow for easier processing of data. Each file gets saved in a folder called "Fused Recievers" and the file name is appended with the measurement that was chosen. The alterations from python 2 -> 3 mean that this doesn't currently work on install alone. modifications are needed to be made to the libsimpa.py file
 
-*will update when back at pc* 
+*will provide a corrected version in the repository in the near future* 
 
 ## test_python 
 currently under development.
