@@ -1,7 +1,21 @@
 # Author: Kyle Brooks
 # Created: 09/12/21
+# Modified:20/12/21
 
 import uictrl as ui
+def set_direc_display(idgrp):
+        grpsrc=ui.element(idgrp)
+        all_property=grpsrc.getallelementbytype(ui.element_type.ELEMENT_TYPE_SCENE_RECEPTEURSP_RECEPTEUR_PROPRIETES) 
+        for prop in all_property:
+            ui.element(prop).updatedecimalconfig("u",0)
+            ui.element(prop).updatedecimalconfig("v",0)
+            ui.element(prop).updatedecimalconfig("w",0)
+
+def set_reciever_activation(idgrp,newstate):
+        grpsrc=ui.element(idgrp)
+        all_property=grpsrc.getallelementbytype(ui.element_type.ELEMENT_TYPE_SCENE_RECEPTEURSP_RECEPTEUR_RENDU) 
+        for prop in all_property:
+            ui.element(prop).updateboolconfig("showlabel",newstate)
 
 class manager:
     def __init__(self):
@@ -18,28 +32,12 @@ class manager:
         return True
 
     def enable_reciever_names(self, idgrp):
-        self.set_reciever_activation(idgrp, True)
+        set_reciever_activation(idgrp, True)
 
     def disable_reciever_names(self, idgrp):
-        self.set_reciever_activation(idgrp, False)
+        set_reciever_activation(idgrp, False)
         
     def disable_direc_disp(self, idgrp):
-        self.set_direc_display(idgrp)
-    
-    def set_reciever_activation(self,idgrp,newstate):
-        grpsrc=ui.element(idgrp)
-        all_property=grpsrc.getallelementbytype(ui.element_type.ELEMENT_TYPE_SCENE_RECEPTEURSP_RECEPTEUR_RENDU) 
-        for prop in all_property:
-            ui.element(prop).updateboolconfig("showlabel",newstate)
-
-    def set_direc_display(self, idgrp):
-        grpsrc=ui.element(idgrp)
-        all_property=grpsrc.getallelementbytype(ui.element_type.ELEMENT_TYPE_SCENE_RECEPTEURSP_RECEPTEUR_PROPRIETES) 
-        for prop in all_property:
-            ui.element(prop).updatedecimalconfig("u",0)
-            ui.element(prop).updatedecimalconfig("v",0)
-            ui.element(prop).updatedecimalconfig("w",0)
-
-# Directivity Line can be removed by setting reciever properties -> direction x,y,z to 0
+        set_direc_display(idgrp)
 
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_RECEPTEURSP, manager())
