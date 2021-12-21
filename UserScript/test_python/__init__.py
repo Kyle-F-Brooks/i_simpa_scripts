@@ -4,6 +4,8 @@ import libsimpa
 import csv
 import os
 
+# this document is currently a test workspace and does not have any real function
+
 def transmision_loss_calc():
     # STL = SPLex - 6 - avgSPL + QFF
     print("Hello")

@@ -15,6 +15,7 @@ def GetMixedLevel(folderwxid, target):
     for idrecp in recplist:
         recp=ui.element(idrecp)
         if recp.getinfos()["name"]=="Sound level":
+            # if the acoustic parameters have not yet been calculated then calculate them
             if not recp.getinfos()["name"]=="Acoustic parameters":
                 ui.application.sendevent(recp,ui.idevent.IDEVENT_RECP_COMPUTE_ACOUSTIC_PARAMETERS,{"TR":"15;30", "EDT":"", "D":""})
             pere=ui.element(recp.getinfos()["parentid"])
@@ -69,6 +70,8 @@ class manager:
             return True
         else:
             return False
+
+    # button commands
     def MakeDir(self, idel):
         grp=ui.e_file(idel)
         pat=grp.buildfullpath()+ r"\Fused Recievers"
@@ -129,4 +132,6 @@ class manager:
         self.onRT30(idel)
         self.OnEDT(idel)
         self.OnST(idel)
+
+# let the application know which menu to put the tool buttons into
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_REPORT_FOLDER, manager())
