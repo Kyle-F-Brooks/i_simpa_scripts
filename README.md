@@ -1,5 +1,6 @@
 # I-Simpa Scripts
 Author: Kyle Brooks
+The convert_all_tool and recp_res_tool scripts are modified by Kyle Brooks and not originally written.
 
 ## Description
 A repository of python scripts written to make using funtions in I-Simpa easier
