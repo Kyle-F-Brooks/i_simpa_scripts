@@ -2,6 +2,9 @@
 # Modified: Kyle Brooks
 # Created/Modified: 09/12/21
 
+# Combines each value of a chosen measurement into a single file to allow for easier processing of data. Each file 
+# gets saved in a folder called "Fused Recievers" and the file name is appended with the measurement that was chosen.
+
 import uictrl as ui
 from libsimpa import *
 import os

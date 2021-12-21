@@ -2,6 +2,8 @@
 # Created: 09/12/21
 # Modified:20/12/21
 
+# This tool is used to enable and disable the name tags on each punctual reciever to make viewing of the model easier.
+# Directivity Lines can now be hidden but not re-enabled.
 import uictrl as ui
 
 def set_direc_display(idgrp):

@@ -2,6 +2,9 @@
 # Modified: Kyle Brooks
 # Created/Modified: 30/11/21
 
+# An edited version of a script that converts the gabe format files into csv.
+# The changes made, allow it to be used with python 3 as in the latest version of I-Simpa.
+
 import uictrl as ui
 import libsimpa
 import csv
