@@ -22,7 +22,7 @@ The libsimpa file has to be modified for Python 3 in order for the recp_res_tool
 
 ## all_reciever_tool
 This tool is used to enable and disable the name tags on each punctual reciever to make viewing of the model easier.
-Directivity Lines can now be hidden but not re-enabled.
+Directivity Lines can be removed but not re-enabled, this does not have an effect on the final result.
 
 ## convert_all_tool
 An edited version of a script that converts the gabe format files into csv. The changes made, allow it to be used with python 3 as in the latest version of I-Simpa. 
