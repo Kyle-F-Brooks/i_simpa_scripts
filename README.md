@@ -1,6 +1,6 @@
 # I-Simpa Scripts
 Author: Kyle Brooks
-The convert_all_tool and recp_res_tool scripts are modified by Kyle Brooks and not originally written.
+The convert_all_tool, recp_res_tool and libsimpa scripts are modified by Kyle Brooks and not originally written.
 
 Please check my other repositories for the python 2 scripts
 
@@ -18,7 +18,7 @@ Each folder contains the required files to run the tools within I-Simpa 1.3.4 wi
 
 ## libsimpa
 **NOT REQUIRED FOR PYTHON 2 INSTALLATIONS**
-The libsimpa file has to be modified for Python 3 in order for the recp_res_tool to work. Paste the file into C:\Program Files\I-SIMPA\libsimpa. 
+The libsimpa file has to be modified for Python 3 in order for the recp_res_tool to work. Paste the file into C:\Program Files\I-SIMPA\libsimpa. Handles the communication between python and c++.
 
 ## all_reciever_tool
 This tool is used to enable and disable the name tags on each punctual reciever to make viewing of the model easier.
