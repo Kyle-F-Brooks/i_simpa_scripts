@@ -3,7 +3,7 @@
 # Created/Modified: 09/12/21
 
 # Combines each value of a chosen measurement into a single file to allow for easier processing of data. Each file 
-# gets saved in a folder called "Fused Recievers" and the file name is appended with the measurement that was chosen.
+# gets saved in a folder called "Fused Receivers" and the file name is appended with the measurement that was chosen.
 
 import uictrl as ui
 from libsimpa import *
@@ -69,7 +69,7 @@ class manager:
         if infos["name"]==u"Punctual receivers":
             submenu=[(u"Do All", self.GetAll), (u"Sound Level", self.GetSPL), (u"Sound Level (A)", self.GetSPLA), (u"C-50", self.GetC50), (u"C-80", self.GetC80), (u"Ts", self.GetTs), (u"RT-15", self.GetRT15), (u"RT-30", self.GetRT30), (u"EDT",self.GetEDT), (u"ST", self.GetST)]
             menu.insert(0,()) 
-            menu.insert(0,(u"Merge Point Recievers",submenu))
+            menu.insert(0,(u"Merge Point Receivers",submenu))
             return True
         else:
             return False
@@ -77,53 +77,53 @@ class manager:
     # button commands
     def MakeDir(self, idel):
         grp=ui.e_file(idel)
-        pat=grp.buildfullpath()+ r"\Fused Recievers"
+        pat=grp.buildfullpath()+ r"\Fused Receivers"
         if not os.path.exists(pat):
             os.mkdir(pat)
     def OnSPL(self,idel):
         self.MakeDir(idel)
         grp=ui.e_file(idel)
-        do_fusion(idel,grp.buildfullpath()+ r"Fused Recievers\fusionSPL.gabe", "Sound level (dB)")
+        do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionSPL.gabe", "Sound level (dB)")
         print("Creating file fusionSPL.gabe")
     def OnSPLA(self,idel):
         self.MakeDir(idel)
         grp=ui.e_file(idel)
-        do_fusion(idel,grp.buildfullpath()+ r"Fused Recievers\fusionSPLA.gabe", "Sound level (dBA)")
+        do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionSPLA.gabe", "Sound level (dBA)")
         print("Creating file fusionSPLA.gabe")
     def OnC50(self,idel):
         self.MakeDir(idel)
         grp=ui.e_file(idel)
-        do_fusion(idel,grp.buildfullpath()+ r"Fused Recievers\fusionC50.gabe", "C-50 (dB)")
+        do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionC50.gabe", "C-50 (dB)")
         print("Creating file fusionC50.gabe")
     def OnC80(self,idel):
         self.MakeDir(idel)
         grp=ui.e_file(idel)
-        do_fusion(idel,grp.buildfullpath()+ r"Fused Recievers\fusionC80.gabe", "C-80 (dB)")
+        do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionC80.gabe", "C-80 (dB)")
         print("Creating file fusionC80.gabe")
     def OnTS(self,idel):
         self.MakeDir(idel)
         grp=ui.e_file(idel)
-        do_fusion(idel,grp.buildfullpath()+ r"Fused Recievers\fusionTs.gabe", "Ts (ms)")
+        do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionTs.gabe", "Ts (ms)")
         print("Creating file fusionTs.gabe")
     def OnRT15(self,idel):
         self.MakeDir(idel)
         grp=ui.e_file(idel)
-        do_fusion(idel,grp.buildfullpath()+ r"Fused Recievers\fusionRT15.gabe", "RT-15 (s)")
+        do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionRT15.gabe", "RT-15 (s)")
         print("Creating file fusionRT15.gabe")
     def onRT30(self,idel):
         self.MakeDir(idel)
         grp=ui.e_file(idel)
-        do_fusion(idel,grp.buildfullpath()+ r"Fused Recievers\fusionRT30.gabe", "RT-30 (s)")
+        do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionRT30.gabe", "RT-30 (s)")
         print("Creating file fusionRT30.gabe")
     def OnEDT(self,idel):
         self.MakeDir(idel)
         grp=ui.e_file(idel)
-        do_fusion(idel,grp.buildfullpath()+ r"Fused Recievers\fusionEDT.gabe", "EDT (s)")
+        do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionEDT.gabe", "EDT (s)")
         print("Creating file fusionEDT.gabe")
     def OnST(self,idel):
         self.MakeDir(idel)
         grp=ui.e_file(idel)
-        do_fusion(idel,grp.buildfullpath()+ r"Fused Recievers\fusionST.gabe", "ST (dB)")
+        do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionST.gabe", "ST (dB)")
         print("Creating file fusionST.gabe")
     def OnAll(self,idel):
         self.OnSPL(idel)
