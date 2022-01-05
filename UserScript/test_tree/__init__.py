@@ -20,10 +20,10 @@ class test_tree(ui.element):
             # User options
             coreconf.appendpropertylist("solver_mode","Calculation mode",[["Time","Static"],[0,1]],0,False,1,True)
             coreconf.appendpropertybool("with_direct_sound","Use direct sound",True,True)
-            (u"Calculation mode")
-            (u"Use direct sound")
-            (u"Time")
-            (u"Static")
+            # (u"Calculation mode")
+            # (u"Use direct sound")
+            # (u"Time")
+            # (u"Static")
         else:
             pass #Here in case of loading an existing project
 
