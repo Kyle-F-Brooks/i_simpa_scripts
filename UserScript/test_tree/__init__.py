@@ -31,7 +31,7 @@ class test_tree(ui.element):
         return "test_tree"
 
     def geticonid(self,state_open):
-        return ui.graph.GRAPH_FOLDER_OPEN
+        return ui.graph.GRAPH_ITEM
 
     def modified(self,idelmodified):
         if ui.element(idelmodified).getinfos()["name"]=="solver_mode":
