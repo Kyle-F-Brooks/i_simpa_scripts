@@ -8,10 +8,18 @@ with open("C:\\Users\\Lab Engineer.DESKTOP-HN2JAP3\\Documents\\i_simpa_scripts\\
 
 del(file_in)
 
+
 for line in lines:
-    x=line.decode('cp1252')
-    print(x)
-    print(x.encode('utf-8'))
+    # x=line.decode('cp1252')
+    print(line)
+    print("\n")
+    
+    # try:
+    #     print(line.decode('cp1252'))
+    # except:
+    #     pass
+
+
 
 # s = u'Zåìôèðà'
 # print(s.encode('latin1').decode('cp1251'))
