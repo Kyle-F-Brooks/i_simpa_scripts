@@ -38,3 +38,6 @@ currently under development.
 * STL Hologram
 * Store and return to set camera positions
 * Custom Material Import: CATT Acoustic/li8 Odeon
+
+## other scripts
+I-Simpa related scripts for tasks that don't need to be executed within the program
