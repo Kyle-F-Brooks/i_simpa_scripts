@@ -5,6 +5,7 @@ The convert_all_tool, recp_res_tool and libsimpa scripts are modified by Kyle Br
 
 Please check my other repositories for the python 2 scripts
 
+Test scripts have been moved to a seperate branch
 ## Description
 A repository of python scripts written to make using funtions in I-Simpa easier
 
