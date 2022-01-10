@@ -25,11 +25,13 @@ def set_reciever_activation(idgrp,newstate):
 
 class manager:
     def __init__(self):
+        # register events for menu buttons 
         self.enable_reciever_namesid=ui.application.register_event(self.enable_reciever_names)
         self.disable_reciever_namesid=ui.application.register_event(self.disable_reciever_names)
         self.disable_direc_dispid=ui.application.register_event(self.disable_direc_disp)
 
     def getmenu(self,typeel,idel,menu):
+        # create menu buttons and link them to their functions
         submenu=[]
         submenu.append((u"Enable Names", self.enable_reciever_namesid))
         submenu.append((u"Disable Names", self.disable_reciever_namesid))

@@ -15,20 +15,21 @@ def GetMixedLevel(folderwxid, target):
     cols=[]
     folder=ui.element(folderwxid)
     recplist=folder.getallelementbytype(ui.element_type.ELEMENT_TYPE_REPORT_GABE_RECP)
-    for idrecp in recplist:
+    for idrecp in recplist: # for each punctual receiver in folder "Punctual receivers"
         recp=ui.element(idrecp)
+        # once the spps is calculated a file named "Sound level" will be in the Project > Results tree
         if recp.getinfos()["name"]=="Sound level":
-            # if the acoustic parameters have not yet been calculated then calculate them
-            if not recp.getinfos()["name"]=="Acoustic parameters":
+            if not recp.getinfos()["name"]=="Acoustic parameters": # if the acoustic parameters have not yet been calculated then calculate them
                 ui.application.sendevent(recp,ui.idevent.IDEVENT_RECP_COMPUTE_ACOUSTIC_PARAMETERS,{"TR":"15;30", "EDT":"", "D":""})
+            # get the acoustics parameters file    
             pere=ui.element(recp.getinfos()["parentid"])
             nomrecp=pere.getinfos()["label"]
             params=ui.element(pere.getelementbylibelle('Acoustic parameters'))
             gridparam=ui.application.getdataarray(params)
-            if len(cols)==0: 
-                cols.append(next(zip(*gridparam)))
-                idcol=gridparam[0].index(target) 
-            cols.append([nomrecp]+list(list(zip(*gridparam))[idcol][1:]))
+            if len(cols)==0: # with array cols empty 
+                cols.append(next(zip(*gridparam))) # add frequency row
+                idcol=gridparam[0].index(target) # set target column equal to the target title
+            cols.append([nomrecp]+list(list(zip(*gridparam))[idcol][1:])) # add data from reciever to new row
     return cols
 
 def SaveLevel(tab,path):
@@ -48,10 +49,12 @@ def SaveLevel(tab,path):
 def do_fusion(folderwxid, path, target):
     arraydata=GetMixedLevel(folderwxid, target)
     SaveLevel(zip(*arraydata),path)
+    # reload folder to show newly created files
     ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
 
 class manager:
     def __init__(self):
+        # add functions as an event in I-SIMPA
         self.GetSPL=ui.application.register_event(self.OnSPL)
         self.GetSPLA=ui.application.register_event(self.OnSPLA)
         self.GetC50=ui.application.register_event(self.OnC50)
@@ -64,6 +67,7 @@ class manager:
         self.GetAll=ui.application.register_event(self.OnAll)
         
     def getmenu(self,typeel,idel,menu):
+        # Create the additional menu buttons and link the function they initiate
         el=ui.element(idel)
         infos=el.getinfos()
         if infos["name"]==u"Punctual receivers":
@@ -74,12 +78,13 @@ class manager:
         else:
             return False
 
-    # button commands
+    # creates the Fused Receivers folder if it does not yet exist
     def MakeDir(self, idel):
         grp=ui.e_file(idel)
         pat=grp.buildfullpath()+ r"\Fused Receivers"
         if not os.path.exists(pat):
             os.mkdir(pat)
+    # button commands, create file name and prints process to the pyhton console
     def OnSPL(self,idel):
         self.MakeDir(idel)
         grp=ui.e_file(idel)
@@ -136,5 +141,5 @@ class manager:
         self.OnEDT(idel)
         self.OnST(idel)
 
-# let the application know which menu to put the tool buttons into
+# register tool and let the application know which menu to put the tool buttons into
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_REPORT_FOLDER, manager())
