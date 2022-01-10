@@ -21,8 +21,7 @@ def do_convert_all(folderwxid):
             gridparam=ui.application.getdataarray(document)
             path = document.buildfullpath().replace(".gabe",".csv")
             with open(path.encode('cp1252'), 'w') as csvfile:
-                writer = csv.writer(csvfile, delimiter=',',
-                                        quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                writer = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
                 for row in gridparam:
                     writer.writerow(row)
 class manager:
