@@ -32,3 +32,13 @@ An edited version of a script that converts the gabe format files into csv. The 
 ## recp_res_tool
 Combines each value of a chosen measurement into a single file to allow for easier processing of data. Each file gets saved in a folder called "Fused Recievers" and the file name is appended with the measurement that was chosen. The alterations from python 2 -> 3 mean that this doesn't currently work on install alone. Replacement of the libsimpa file is required with the one available in the repository.
 
+## test_python and test_tree
+currently under development.
+### Possible Features
+* STL Calculation
+* STL Hologram
+* Store and return to set camera positions
+* Custom Material Import: CATT Acoustic/li8 Odeon
+
+## other scripts
+I-Simpa related scripts for tasks that don't need to be executed within the program
