@@ -27,8 +27,10 @@ def do_convert_all(folderwxid):
                     writer.writerow(row)
 class manager:
     def __init__(self):
+        # register function for menu button
         self.OnConvertAllid=ui.application.register_event(self.OnConvertAll)
     def getmenu(self,typeel,idel,menu):
+        # create and link the menu button with its function
         el=ui.element(idel)
         infos=el.getinfos()
         menu.insert(0,())
@@ -36,8 +38,9 @@ class manager:
         return True
         
     def OnConvertAll(self,idel):
-        print("\nCSV Conversion: Processing")
-        do_convert_all(idel)
-        ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
-        print("\nCSV Conversion: Complete")
+        print("\nCSV Conversion: Processing") # prints to python console
+        do_convert_all(idel) # call conversion function
+        ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER) # reload folders to make new files visible
+        print("\nCSV Conversion: Complete") # prints to python console
+# register new button in program and tell it where to make it available
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_REPORT_FOLDER, manager())
