@@ -3,7 +3,7 @@
 in_type = input("Is the input a file? (y/n):\n")
 
 
-# "C:\\Users\\Lab Engineer.DESKTOP-HN2JAP3\\OneDrive\\Documents\\Github Repos\\i_simpa_scripts\\otherScripts\\Sound level.csbin"
+# "C:\\Users\\Lab Engineer.DESKTOP-HN2JAP3\\OneDrive\\Documents\\Github Repos\\i_simpa_scripts\\otherScripts\\Sound_level.csbin"
 try:
     if in_type.lower()=="y":
         input_data = input("Input file location:\n")
