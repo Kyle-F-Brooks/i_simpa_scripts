@@ -16,7 +16,7 @@ try:
 
             for codec in codecs:
                 try:
-                    print(lines[0].decode(codec) + " - using" + codec)
+                    print(lines[0].decode(codec) + " - using " + codec)
                 except:
                     print(f"Decode using {codec} failed")
             # for line in lines:
