@@ -19,26 +19,44 @@ try:
                     print(lines[0].decode(codec) + " - using " + codec)
                 except:
                     print(f"Decode using {codec} failed")
-            # for line in lines:
-                  # print(line)
-    #             # print("\n")
-
-    #             # print(int.from_bytes(line, byteorder='little'))
-    #             # print("\n")
-                
-    #             try:
-    #                 print(line.decode('utf-8'))
-    #             except:
-    #                 print("line read failed")
-    #     except:
-    #         print("Issue occurred")
-    # if in_type.lower()=='n':
-    #     input_data = input("Input String:\n")
-    #     try:
-    #         s = input_data
-    #         print(s.encode('latin1').decode('cp1252'))
         except:
             print("Invalid Input")
 except:
     print("invalid answer")
 
+
+# try:
+#     if in_type.lower()=="y":
+#         input_data = input("Input file location:\n")
+#         try:
+#             with open(input_data, mode="rb") as file_in:
+#                 lines = []
+#                 for line in file_in:
+#                     lines.append(line)
+#             del(file_in)
+
+#             for line in lines:
+#                 print(line)
+#                 print("\n")
+
+#                 print(int.from_bytes(line, byteorder='little'))
+#                 print("\n")
+                
+#                 try:
+#                     print(line.decode('utf-8'))
+#                 except:
+#                     print("line read failed")
+        
+#         except:
+#                print("Issue occurred")
+
+#     if in_type.lower()=='n':
+#         input_data = input("Input String:\n")
+#         try:
+#             s = input_data
+#             print(s.encode('latin1').decode('cp1252'))
+#         except:
+#             print("Invalid Input")
+
+# except:
+#     print("invalid answer")
