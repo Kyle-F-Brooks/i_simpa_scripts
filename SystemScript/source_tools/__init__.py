@@ -38,6 +38,13 @@ def MakeLineSrc(srcgroupindice,startpoint=[0,0,0],quantity=1,step=[1,0,0]):
         srcEl.updatepositionconfig("pos_source",curpos)
         curpos=[curpos[0]+step[0],curpos[1]+step[1],curpos[2]+step[2]]
 
+def set_source_name(idgrp,newstate):
+    # depending on input, will show or hide the name label
+    grpsrc=ui.element(idgrp)
+    all_property=grpsrc.getallelementbytype(ui.element_type.ELEMENT_TYPE_SCENE_SOURCES_SOURCE_RENDU) 
+    for prop in all_property:
+        ui.element(prop).updateboolconfig("showlabel",newstate)
+
 class manager:
     def __init__(self):
         self.makelinesrcid=ui.application.register_event(self.makeline)
@@ -61,6 +68,15 @@ class manager:
             menu.insert(2,())
         menu.insert(2,(_(u"Create a line of sound sources"),self.makelinesrcid,"Bitmaps/popup_new.png"))
         return True
+
+    def show_grp_names(self, idgrp):
+        set_source_name(idgrp, True)
+        print("Enabled: Source Names\n")
+
+    def hide_grp_names(self, idgrp):
+        set_source_name(idgrp, False)
+        print("Disabled: Source Names\n")
+
     def makeline(self,idel):
         lbl_startptx=_(u"Starting position x (m)")
         lbl_startpty=_(u"Starting position y (m)")
