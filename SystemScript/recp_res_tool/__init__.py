@@ -61,7 +61,7 @@ class manager:
         self.GetC80=ui.application.register_event(self.OnC80)
         self.GetTs=ui.application.register_event(self.OnTS)
         self.GetRT15=ui.application.register_event(self.OnRT15)
-        self.GetRT30=ui.application.register_event(self.onRT30)
+        self.GetRT30=ui.application.register_event(self.OnRT30)
         self.GetEDT=ui.application.register_event(self.OnEDT)
         self.GetST=ui.application.register_event(self.OnST)
         self.GetAll=ui.application.register_event(self.OnAll)
@@ -115,7 +115,7 @@ class manager:
         grp=ui.e_file(idel)
         do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionRT15.gabe", "RT-15 (s)")
         print("Created file fusionRT15.gabe")
-    def onRT30(self,idel):
+    def OnRT30(self,idel):
         self.MakeDir(idel)
         grp=ui.e_file(idel)
         do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionRT30.gabe", "RT-30 (s)")
@@ -137,7 +137,7 @@ class manager:
         self.OnC80(idel)
         self.OnTS(idel)
         self.OnRT15(idel)
-        self.onRT30(idel)
+        self.OnRT30(idel)
         self.OnEDT(idel)
         self.OnST(idel)
 
