@@ -6,9 +6,9 @@ import os
 
 # this document is currently a test workspace and does not have any real function
 
-def transmision_loss_calc():
+# def transmision_loss_calc():
     # STL = SPLex - 6 - avgSPL + QFF
-    print("Hello")
+    # print("Hello")
 
 # def open_as_csv(folderwxid):
 #     folder=ui.element(folderwxid)
@@ -37,13 +37,14 @@ class manager:
         menu.insert(0,(u"Test Code",self.testFuncid))
         return True
         
-    def OnConvertAll(self,idel):
-        transmision_loss_calc()
+    def testFunc(self,idel):
+        # transmision_loss_calc()
         input1=(u"First Input Data")
         input2=(u"Second Input Data")
-        input3=(u"Third Input Data")
 
-        res=ui.application.getuserinput((u"This pop-up currently has no function"),(u"Input random number values"),{ input1 : "0",input2 : "0",input3 : "0",})
+        res=ui.application.getuserinput((u"This pop-up currently has no function"),(u"Input random number values"),{ input1 : "0", input2 : ["option1", "option2", "option3"]})
+
+        print(res)
         # open_as_csv(idel)
-        ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER) #refreshes folder in ui tree
+        # ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER) #refreshes folder in ui tree
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_REPORT_FOLDER, manager()) # alter here based on menu location
