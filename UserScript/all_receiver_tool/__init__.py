@@ -32,11 +32,11 @@ class manager:
 
     def getmenu(self,typeel,idel,menu):
         # create menu buttons and link them to their functions
-        submenu=[]
-        submenu.append((u"Enable Names", self.enable_receiver_namesid))
-        submenu.append((u"Disable Names", self.disable_receiver_namesid))
-        menu.insert(2,(u"Receiver Names", submenu))
-        menu.insert(3,(u"Remove Directivity Lines", self.disable_direc_dispid))
+        submenu=[(u"Enable Names", self.enable_receiver_namesid),
+        (u"Disable Names", self.disable_receiver_namesid),
+        (),
+        (u"Remove Directivity Lines", self.disable_direc_dispid)]
+        menu.insert(2,(u"All Receievers", submenu))
         return True
 
     def enable_receiver_names(self, idgrp):

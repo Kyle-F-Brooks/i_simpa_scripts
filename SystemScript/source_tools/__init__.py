@@ -55,18 +55,18 @@ class manager:
         self.rotate_grp_sourcesid=ui.application.register_event(self.rotate_src)
         self.translation_grp_sourcesid=ui.application.register_event(self.translate_src)
     def getmenu(self,typeel,idel,menu):
-        submenu=[(_(u"Enable"),self.enable_grp_sourcesid),
-                 (_(u"Disable"),self.disable_grp_sourcesid),
+        submenu=[((u"Enable"),self.enable_grp_sourcesid),
+                 ((u"Disable"),self.disable_grp_sourcesid),
                  (),
-                 (_(u"Show Names"),self.show_grp_namesid),
-                 (_(u"Hide Names"),self.hide_grp_namesid),
+                 ((u"Show Names"),self.show_grp_namesid),
+                 ((u"Hide Names"),self.hide_grp_namesid),
                  (),
-                 (_(u"Rotation"),self.rotate_grp_sourcesid),
-                 (_(u"Translation"),self.translation_grp_sourcesid)]
+                 ((u"Rotation"),self.rotate_grp_sourcesid),
+                 ((u"Translation"),self.translation_grp_sourcesid)]
         if len(ui.element(idel).childs())>0:
-            menu.insert(2,(_(u"All sources"),submenu))
+            menu.insert(2,((u"All sources"),submenu))
             menu.insert(2,())
-        menu.insert(2,(_(u"Create a line of sound sources"),self.makelinesrcid,"Bitmaps/popup_new.png"))
+        menu.insert(2,((u"Create a line of sound sources"),self.makelinesrcid,"Bitmaps/popup_new.png"))
         return True
 
     def show_grp_names(self, idgrp):
