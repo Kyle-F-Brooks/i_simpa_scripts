@@ -19,7 +19,6 @@ Each folder contains the required files to run the tools within I-Simpa 1.3.4 wi
 4. Reboot any open instances of I-Simpa 
 
 ## libsimpa
-**NOT REQUIRED FOR PYTHON 2 INSTALLATIONS**
 The libsimpa file has to be modified for Python 3 in order for the recp_res_tool to work. Paste the file into C:\Program Files\I-SIMPA\libsimpa. Handles the communication between python and c++.
 
 ## all_reciever_tool
