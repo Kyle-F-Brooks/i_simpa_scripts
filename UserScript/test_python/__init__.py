@@ -1,10 +1,13 @@
 # -*- coding: cp1252 -*-
+import re
 import uictrl as ui
 import libsimpa
 import csv
 import os
 
 # this document is currently a test workspace and does not have any real function
+
+"""test a function to fetch the name of each reciever, out into a dict and display them to be selected in a pop up window"""
 
 # def transmision_loss_calc():
     # STL = SPLex - 6 - avgSPL + QFF
@@ -27,24 +30,26 @@ import os
             #     for row in gabedoc:
             #         writer.writerow(row)
 
+
 class manager:
     def __init__(self):
         self.testFuncid=ui.application.register_event(self.testFunc)
     def getmenu(self,typeel,idel,menu):
         el=ui.element(idel)
         infos=el.getinfos()
-        menu.insert(0,())
-        menu.insert(0,(u"Test Code",self.testFuncid))
-        return True
+        if infos["name"]==u"Punctual receivers":
+            menu.insert(0,())
+            menu.insert(0,(u"Test Code",self.testFuncid))
+            return True
+        else:
+            return False
         
     def testFunc(self,idel):
         # transmision_loss_calc()
-        input1=(u"First Input Data")
-        input2=(u"Second Input Data")
+        input1=(u"Please Pick a Receiver")
 
-        res=ui.application.getuserinput((u"This pop-up currently has no function"),(u"Input random number values"),{ input1 : "0", input2 : ["option1", "option2", "option3"]})
+        res=ui.application.getuserinput((u"This pop-up currently has no function"),(u"Pick a Reciever from the list"),{input1 : "0"})
 
-        print(res)
         # open_as_csv(idel)
         # ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER) #refreshes folder in ui tree
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_REPORT_FOLDER, manager()) # alter here based on menu location
