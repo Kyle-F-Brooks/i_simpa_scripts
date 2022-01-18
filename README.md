@@ -1,7 +1,7 @@
 # I-Simpa Scripts
 Author: Kyle Brooks
 
-The convert_all_tool, recp_res_tool and libsimpa scripts are modified by Kyle Brooks and not originally written.
+The convert_all_tool, recp_res_tool, source_tools and libsimpa scripts are modified by Kyle Brooks and not originally written.
 
 Please check my other repositories for the python 2 scripts
 
@@ -27,6 +27,9 @@ Directivity Lines can be removed but not re-enabled, this does not have an effec
 
 ## convert_all_tool
 An edited version of a script that converts the gabe format files into csv. The changes made, allow it to be used with python 3 as in the latest version of I-Simpa. 
+
+## source_tools
+Normally packaged with the software. Edited to remove all source names without disabling the sources
 
 ## recp_res_tool
 Combines each value of a chosen measurement into a single file to allow for easier processing of data. Each file gets saved in a folder called "Fused Recievers" and the file name is appended with the measurement that was chosen. The alterations from python 2 -> 3 mean that this doesn't currently work on install alone. Replacement of the libsimpa file is required with the one available in the repository.
