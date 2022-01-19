@@ -1,6 +1,10 @@
+# Author: Kyle Brooks
+# Created: 18/01/22
+
 import uictrl as ui
 import libsimpa
 
+# this function works
 def getNames(folderwxid):
     # if using the fusion files, it may not be needed to get the receiver element dicts.
     receivers=[] # array of receiver element dicts
@@ -27,13 +31,13 @@ def getVals(folderwxid, recid):
     receivers=[]
     folder=ui.element(folderwxid) # set folder
     recplist=folder.getallelementbytype(ui.element_type.ELEMENT_TYPE_REPORT_GABE_RECP) # get all folders in folder
-    for idrecp in recplist: # for each folder get info
-        recp=ui.element(idrecp)
-        infos=recp.getinfos()
-        if infos["name"]=="fusedSPL": # if receiver folder append to array receivers 
-            # store the row that relates to the excitation spl
-            # add all others to array receivers
-            pass
+    # for idrecp in recplist: # for each folder get info
+    #     recp=ui.element(idrecp)
+    #     infos=recp.getinfos()
+    #     if infos["name"]=="fusedSPL": # if receiver folder append to array receivers 
+    #         # store the row that relates to the excitation spl
+    #         # add all others to array receivers
+    #         pass
 
 class manager:
     def __init__(self):
@@ -53,6 +57,7 @@ class manager:
         names, receivers=getNames(idel)
         uiTitle="Function Currently Under Development"
         userInput1=ui.application.getuserinput(uiTitle,(u"Pick a Reciever from the list"),{"Excitation Receiver": names})
+        # getuserinput returns Tuple of (Bool, dict)
         # for receiver in receivers:
         #     if receiver["label"]==userInput1[1]["Please Pick a Receiver"]:
         #         print(receiver)
