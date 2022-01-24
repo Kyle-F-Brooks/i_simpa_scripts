@@ -1,7 +1,6 @@
 # Author: Kyle Brooks
 # Created: 18/01/22
 
-from itertools import count
 import uictrl as ui
 import libsimpa
 
@@ -114,6 +113,7 @@ class manager:
             if not exists:
                 print("Please Merge Punctual Receivers SPL")
             elif exists:
+                # alphabet used to order frequencies
                 qffIn = {"a. 50 Hz":"0","b. 63 Hz":"0","c. 80 Hz":"0","d. 100 Hz":"0","e. 125 Hz":"0","f. 160 Hz":"0","g. 200 Hz": "0", "h. 250 Hz": "0", "i. 315 Hz":"0", "j. 400 Hz":"0","k. 500 Hz":"0","l. 630 Hz":"0","m. 800 Hz":"0","n. 1000 Hz":"0","o. 1250 Hz":"0","p. 1600 Hz":"0","q. 2000 Hz":"0","r. 2500 Hz":"0","s. 3150 Hz":"0","t. 4000 Hz":"0","u. 5000 Hz":"0","v. 6300 Hz":"0","w. 8000 Hz":"0","x. 10000 Hz":"0","y. 12500 Hz":"0","z. 16000 Hz":"0","zz. 20000 Hz":"0"}
                 userInput2=ui.application.getuserinput(uiTitle,(u"Please Input the QFF data"),qffIn)
                 if userInput2[0]:
