@@ -45,6 +45,7 @@ def getVals(folderwxid, recid):
                                 receivers.append(row) # any row not handled by code above gets added to the receiever list
     return srcrec, receivers, exists
 
+# this function works
 def calcSTL(srcrecInput, recsInput, qffInput, lfInput): # srcrec-source receiver, recs list of other receivers, qff-list of qff vals, lf - list of lf correction vals 
     stl=[] # =srcrec-6-avgSPL+correction
     # create average of all receivers bar src rec
@@ -88,7 +89,19 @@ def calcSTL(srcrecInput, recsInput, qffInput, lfInput): # srcrec-source receiver
     print("\nSTL:\n")
     print(stl)
     
-    
+# def SaveLevel(inputData,path):
+#     data= list(inputData)
+#     # Gabe_rw(), stringarray(), floatarray() called from libsimpa
+#     gabewriter=Gabe_rw(len(data)) # create writer with length equal to data array length
+#     labelcol=stringarray()  # label col is assigned as an array of strings
+#     for cell in data[0][1:]:
+#         labelcol.append(cell.encode('cp1252')) 
+#     for col in data[1:]:
+#         datacol=floatarray()
+#         for cell in col[1:]:
+#             datacol.append(float(cell))
+#         gabewriter.AppendFloatCol(datacol,str(col[0]))
+#     gabewriter.Save(path.encode('cp1252'))    
 
 class manager:
     def __init__(self):
