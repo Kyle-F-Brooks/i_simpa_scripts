@@ -98,18 +98,18 @@ def SaveFile(saveData,path):
 
 class manager:
     def __init__(self):
-        self.selectReceiverid=ui.application.register_event(self.selectReceiver) # register receiver select function to i-simpa
+        self.stlCalculationid=ui.application.register_event(self.stlCalculation) # register receiver select function to i-simpa
     def getmenu(self,elementType,elementId,menu):
         el=ui.element(elementId)
         infos=el.getinfos()
         if infos["name"]==u"Punctual receivers": # only display menu on Punctual receivers file
             menu.insert(0,())
-            menu.insert(0,(u"STL Calculation",self.selectReceiverid))
+            menu.insert(0,(u"STL Calculation",self.stlCalculationid))
             return True
         else:
             return False
 
-    def selectReceiver(self,elementId):
+    def stlCalculation(self,elementId):
         names=getNames(elementId)
         uiTitle="STL Calculation"
         grp=ui.e_file(elementId)
