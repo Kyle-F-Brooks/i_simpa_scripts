@@ -37,7 +37,7 @@ class manager:
         (),
         (u"Remove Directivity Lines", self.disable_direc_dispid)]
         menu.insert(2,(u"All Receievers", submenu))
-        
+        return True
 
     def enable_receiver_names(self, idgrp):
         set_receiver_activation(idgrp, True)
