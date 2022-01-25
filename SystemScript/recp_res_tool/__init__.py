@@ -21,7 +21,7 @@ def GetMixedLevel(folderwxid, target):
         if recp.getinfos()["name"]=="Sound level":
             if not recp.getinfos()["name"]=="Acoustic parameters": # if the acoustic parameters have not yet been calculated then calculate them
                 ui.application.sendevent(recp,ui.idevent.IDEVENT_RECP_COMPUTE_ACOUSTIC_PARAMETERS,{"TR":"15;30", "EDT":"", "D":""})
-            # get the acoustics parameters file    
+            # get the acoustics parameters file
             pere=ui.element(recp.getinfos()["parentid"])
             nomrecp=pere.getinfos()["label"]
             params=ui.element(pere.getelementbylibelle('Acoustic parameters'))
@@ -33,7 +33,7 @@ def GetMixedLevel(folderwxid, target):
     return cols
 
 def SaveLevel(tab,path):
-    tab1= list(tab)
+    tab1=list(tab)
     # Gabe_rw(), stringarray(), floatarray() called from libsimpa
     gabewriter=Gabe_rw(len(tab1))
     labelcol=stringarray()
