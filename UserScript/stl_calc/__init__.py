@@ -77,7 +77,7 @@ def calcSTL(srcrecInput, recsInput, qffInput, lfInput): # srcrec-source receiver
     # stl calculation
     for k,v in enumerate(srcrec):
         stl.append(str(float(v)-6-avgSPL[k]+correction[k]))
-    freq=('','50 Hz','63 Hz','80 Hz','100 Hz','125 Hz','160 Hz','200 Hz','250 Hz','315 Hz','400 Hz','500 Hz','630 Hz','800 Hz','1000 Hz','1250 Hz','1600 Hz','2000 Hz','2500 Hz','3150 Hz','4000 Hz','5000 Hz','6300 Hz','8000 Hz','10000 Hz','12500 Hz','16000 Hz','20000 Hz')
+    freq=('','100 Hz','125 Hz','160 Hz','200 Hz','250 Hz','315 Hz','400 Hz','500 Hz','630 Hz','800 Hz','1000 Hz','1250 Hz','1600 Hz','2000 Hz','2500 Hz','3150 Hz','4000 Hz','5000 Hz','6300 Hz','8000 Hz','10000 Hz')
     stl.insert(0,'STL')
     save=[freq,stl]
     return save
@@ -121,10 +121,10 @@ class manager:
                 print("Please Merge Punctual Receivers SPL")
             elif exists:
                 # alphabet used to order frequencies
-                qffIn = {"a. 50 Hz":"0","b. 63 Hz":"0","c. 80 Hz":"0","d. 100 Hz":"0","e. 125 Hz":"0","f. 160 Hz":"0","g. 200 Hz": "0", "h. 250 Hz": "0", "i. 315 Hz":"0", "j. 400 Hz":"0","k. 500 Hz":"0","l. 630 Hz":"0","m. 800 Hz":"0","n. 1000 Hz":"0","o. 1250 Hz":"0","p. 1600 Hz":"0","q. 2000 Hz":"0","r. 2500 Hz":"0","s. 3150 Hz":"0","t. 4000 Hz":"0","u. 5000 Hz":"0","v. 6300 Hz":"0","w. 8000 Hz":"0","x. 10000 Hz":"0","y. 12500 Hz":"0","z. 16000 Hz":"0","zz. 20000 Hz":"0"}
+                qffIn={"a. 100 Hz":"0","b. 125 Hz":"0","c. 160 Hz":"0","d. 200 Hz": "0", "e. 250 Hz": "0", "f. 315 Hz":"0", "g. 400 Hz":"0","h. 500 Hz":"0","i. 630 Hz":"0","j. 800 Hz":"0","k. 1000 Hz":"0","l. 1250 Hz":"0","m. 1600 Hz":"0","n. 2000 Hz":"0","o. 2500 Hz":"0","p. 3150 Hz":"0","q. 4000 Hz":"0","r. 5000 Hz":"0","s. 6300 Hz":"0","t. 8000 Hz":"0","u. 10000 Hz":"0"}
                 userInput2=ui.application.getuserinput(uiTitle,(u"Please Input the QFF data"),qffIn)
                 if userInput2[0]:
-                    lfCorr={"a. 50 Hz":"0","b. 63 Hz":"0","c. 80 Hz":"0","d. 100 Hz":"0","e. 125 Hz":"0","f. 160 Hz":"0","g. 200 Hz": "0", "h. 250 Hz": "0", "i. 315 Hz":"0", "j. 400 Hz":"0"}
+                    lfCorr={"a. 100 Hz":"0","b. 125 Hz":"0","c. 160 Hz":"0","d. 200 Hz": "0", "e. 250 Hz": "0", "f. 315 Hz":"0", "g. 400 Hz":"0","h. 500 Hz":"0","i. 630 Hz":"0","j. 800 Hz":"0","k. 1000 Hz":"0","l. 1250 Hz":"0","m. 1600 Hz":"0","n. 2000 Hz":"0","o. 2500 Hz":"0","p. 3150 Hz":"0","q. 4000 Hz":"0","r. 5000 Hz":"0","s. 6300 Hz":"0","t. 8000 Hz":"0","u. 10000 Hz":"0"}
                     userInput3=ui.application.getuserinput(uiTitle,(u"Please Input Low Frequency Correction"),lfCorr)
                     if userInput3[0]:
                         saveData=calcSTL(srcrec, receivers, userInput2[1], userInput3[1])
