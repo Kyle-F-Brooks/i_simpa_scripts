@@ -12,9 +12,9 @@ def getAvg(rts):
     for rt in rts:
         for k,v in enumerate(rt):
             if count==0:
-                avgSPL.append(float(v))
+                avgSPL.append(float(v)*1000)
             else:
-                avgSPL[k]+=float(v)
+                avgSPL[k]+=(float(v)*1000)
         count+=1
     for k,v in enumerate(avgSPL):
         avgSPL[k] /= numSrc
@@ -45,25 +45,25 @@ def getEDT(folderwxid):
 def calcSabineAbs(vol,rt):
     sabine=[]
     for val in rt:
-        sabine.append((0.161*vol)/(float(val)/1000))
+        sabine.append((0.161*vol)/(val/1000))
     return sabine
 # un-tested
 def calcPercentageAbs(area,sabine):
     percentage=[]
     for val in sabine:
-        percentage.append((float(val)/area)*100)
+        percentage.append((val/area)*100)
     return percentage
 # un-tested
 def calcAbsCoeff(bareSabine,sampleSabine,sampleArea):
     absCoeff=[]
     for k,v in enumerate(sampleSabine):
-        absCoeff.append(((float(v)-float(bareSabine[k]))/sampleArea)*100)
+        absCoeff.append(((v-float(bareSabine[k]))/sampleArea)*100)
     return absCoeff
 # un-tested
 def calcSabineFinal(sampleSabine,bareSabine):
     sabineAbs=[]
     for k,v in enumerate(sampleSabine):
-        sabineAbs.append(float(v)-float(bareSabine[k]))
+        sabineAbs.append(v-float(bareSabine[k]))
     return sabineAbs
 # remember to zip(*saveData)
 def SaveFile(saveData,path):
@@ -100,6 +100,7 @@ class manager:
         if userInput1[0]:
             areaData=userInput1[1]
             rt,freq,exists=getEDT(elementId)
+            freq.insert(0,'')
             if not exists:
                 print("Please Merge Point Receivers for EDT")
             if exists:
@@ -109,23 +110,23 @@ class manager:
                     if userInput2[1]["Data Type"] == "Bare":
                         sampleData=calcSabineAbs(int(areaData["Volume"]),avgSPL)
                         absPercent=calcPercentageAbs(int(areaData["Area"]),sampleData)
-                        # add values to begining of each list
-                        freq.insert(0,'')
                         sampleData.insert(0,"Sabine")
                         absPercent.insert(0,"Absorption %")
                         saveData=[freq,sampleData,absPercent]
                         SaveFile(zip(*saveData),grp.buildfullpath()+r"Bare Cabin Absorption.gabe")
-                        ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
-                        # calculate the sabine and abs
-                        # save data under name Bare Absorption
                     elif userInput2[1]["Data Type"] == "Sample":
                         freqRange={"a. 100 Hz":"0","b. 125 Hz":"0","c. 160 Hz":"0","d. 200 Hz": "0", "e. 250 Hz": "0", "f. 315 Hz":"0", "g. 400 Hz":"0","h. 500 Hz":"0","i. 630 Hz":"0","j. 800 Hz":"0","k. 1000 Hz":"0","l. 1250 Hz":"0","m. 1600 Hz":"0","n. 2000 Hz":"0","o. 2500 Hz":"0","p. 3150 Hz":"0","q. 4000 Hz":"0","r. 5000 Hz":"0","s. 6300 Hz":"0","t. 8000 Hz":"0","u. 10000 Hz":"0"}
                         userInput3=ui.application.getuserinput(uiTitle, "Input bare data", freqRange)
                         if userInput3[0]:
                             bareData=list(userInput3[1].values())
                             sampleData=calcSabineAbs(int(areaData["Volume"]),avgSPL)
-                            absCoeff=calcAbsCoeff(bareData,sampleData,areaData["Sample Area"])
-                            sabineAbs=calcSabineFinal(sampleData)
+                            absCoeff=calcAbsCoeff(bareData,sampleData,int(areaData["Sample Area"]))
+                            sabineAbs=calcSabineFinal(sampleData,bareData)
+                            absCoeff.insert(0,"Absorption Coefficient")
+                            sabineAbs.insert(0,"Sabine")
+                            saveData=[freq,absCoeff,sabineAbs]
+                            SaveFile(zip(*saveData),grp.buildfullpath()+r"Cabin Sample Absorption.gabe")
+                    ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
                         # new window to input bare data to allow calculation of abs Coefficient
                 # input bare values will need to be copy pasted
 
