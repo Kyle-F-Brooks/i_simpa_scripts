@@ -72,7 +72,8 @@ def SaveFile(saveData,path):
     gabewriter=Gabe_rw(len(data)) # create writer with length equal to data array length
     labelcol=stringarray()  # label col is assigned as an array of strings
     for cell in data[0][1:]:
-        labelcol.append(cell.encode('cp1252')) 
+        labelcol.append(cell.encode('cp1252'))
+    gabewriter.AppendStrCol(labelcol,'')
     for col in data[1:]:
         datacol=floatarray()
         for cell in col[1:]:
@@ -114,7 +115,6 @@ class manager:
                         absPercent.insert(0,"Absorption %")
                         saveData=[freq,sampleData,absPercent]
                         SaveFile(zip(*saveData),grp.buildfullpath()+r"Bare Cabin Absorption.gabe")
-                        print("\nBare Cabin Data Saved\n1st Row: Sabine\n2nd Row:Absorption %")
                     elif userInput2[1]["Data Type"] == "Sample":
                         freqRange={"a. 100 Hz":"0","b. 125 Hz":"0","c. 160 Hz":"0","d. 200 Hz": "0", "e. 250 Hz": "0", "f. 315 Hz":"0", "g. 400 Hz":"0","h. 500 Hz":"0","i. 630 Hz":"0","j. 800 Hz":"0","k. 1000 Hz":"0","l. 1250 Hz":"0","m. 1600 Hz":"0","n. 2000 Hz":"0","o. 2500 Hz":"0","p. 3150 Hz":"0","q. 4000 Hz":"0","r. 5000 Hz":"0","s. 6300 Hz":"0","t. 8000 Hz":"0","u. 10000 Hz":"0"}
                         userInput3=ui.application.getuserinput(uiTitle, "Input bare data", freqRange)
@@ -127,7 +127,6 @@ class manager:
                             sabineAbs.insert(0,"Sabine")
                             saveData=[freq,absCoeff,sabineAbs]
                             SaveFile(zip(*saveData),grp.buildfullpath()+r"Cabin Sample Absorption.gabe")
-                            print("\nSample Data Saved\n1st Row: Absorption Coefficient\n2nd Row: Sabine Absorption")
                     ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
                         # new window to input bare data to allow calculation of abs Coefficient
                 # input bare values will need to be copy pasted
