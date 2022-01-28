@@ -89,13 +89,13 @@ class manager:
         infos=el.getinfos()
         if infos["name"]=="Punctual receivers": # only display menu on Punctual receivers file
             menu.insert(0,())
-            menu.insert(0,("Absorption Calculation (WIP)",self.calcAbsid))
+            menu.insert(0,("Absorption Calculation",self.calcAbsid))
             return True
         else:
             return False
         
     def calcAbs(self,elementId):
-        uiTitle="Absorption Calculation (WIP)"
+        uiTitle="Absorption Calculation"
         userInput1=ui.application.getuserinput(uiTitle,"Input Data Below",{"Volume": "0","Area":"0","Sample Area":"0"})
         grp=ui.e_file(elementId)
         if userInput1[0]:
