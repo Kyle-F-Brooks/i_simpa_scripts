@@ -1,4 +1,0 @@
-This is a planned script to calculate transfer functions
-
-
-STL = SPLex - 6 - AvgSPL + QFF
