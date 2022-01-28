@@ -38,7 +38,8 @@ def SaveLevel(tab,path):
     gabewriter=Gabe_rw(len(tab1))
     labelcol=stringarray()
     for cell in tab1[0][1:]:
-        labelcol.append(cell.encode('cp1252')) 
+        labelcol.append(cell.encode('cp1252'))
+    gabewriter.AppendStrCol(labelcol,'')
     for col in tab1[1:]:
         datacol=floatarray()
         for cell in col[1:]:

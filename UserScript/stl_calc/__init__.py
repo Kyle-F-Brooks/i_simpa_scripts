@@ -1,6 +1,7 @@
 # Author: Kyle Brooks
 # Created: 18/01/22
 
+from UserScript.alpha_cabin_calc import getAvg
 import uictrl as ui
 from libsimpa import *
 
@@ -88,7 +89,8 @@ def SaveFile(saveData,path):
     gabewriter=Gabe_rw(len(data)) # create writer with length equal to data array length
     labelcol=stringarray()  # label col is assigned as an array of strings
     for cell in data[0][1:]:
-        labelcol.append(cell.encode('cp1252')) 
+        labelcol.append(cell.encode('cp1252'))
+    gabewriter.AppendStrCol(labelcol,'')
     for col in data[1:]:
         datacol=floatarray()
         for cell in col[1:]:
@@ -115,7 +117,7 @@ class manager:
         grp=ui.e_file(elementId)
         userInput1=ui.application.getuserinput(uiTitle,(u"Pick a Reciever from the list"),{"Excitation Receiver": names})
         if userInput1[0]:
-            recid=userInput1[1]["Excitation Receiver"][-1]
+            recid=userInput1[1]["Excitation Receiver"]
             srcrec,receivers,exists=getVals(elementId, recid)
             if not exists:
                 print("Please Merge Punctual Receivers SPL")
