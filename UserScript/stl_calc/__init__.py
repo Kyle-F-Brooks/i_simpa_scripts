@@ -1,7 +1,6 @@
 # Author: Kyle Brooks
 # Created: 18/01/22
 
-from UserScript.alpha_cabin_calc import getAvg
 import uictrl as ui
 from libsimpa import *
 
