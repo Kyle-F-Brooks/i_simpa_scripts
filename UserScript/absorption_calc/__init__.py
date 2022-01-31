@@ -93,7 +93,7 @@ class manager:
         
     def calcAbs(self,elementId):
         uiTitle="Absorption Calculation"
-        userInput1=ui.application.getuserinput(uiTitle,"Input Data Below",{"Volume": "0","Area":"0","Sample Area":"0"})
+        userInput1=ui.application.getuserinput(uiTitle,"Input Data Below",{"Cabin Volume": "0","Cabin Area":"0","Sample Area":"0"})
         grp=ui.e_file(elementId)
         if userInput1[0]:
             areaData=userInput1[1]
@@ -106,8 +106,8 @@ class manager:
                 userInput2=ui.application.getuserinput(uiTitle,"Input Data Below",{"Data Type":["Bare", "Sample"]})
                 if userInput2[0]:
                     if userInput2[1]["Data Type"] == "Bare":
-                        sampleData=calcSabineAbs(int(areaData["Volume"]),avgSPL)
-                        absPercent=calcPercentageAbs(int(areaData["Area"]),sampleData)
+                        sampleData=calcSabineAbs(int(areaData["Cabin Volume"]),avgSPL)
+                        absPercent=calcPercentageAbs(int(areaData["Cabin Area"]),sampleData)
                         sampleData.insert(0,"Sabine")
                         absPercent.insert(0,"Absorption %")
                         saveData=[freq,sampleData,absPercent]
