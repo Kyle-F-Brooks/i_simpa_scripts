@@ -4,7 +4,6 @@
 from libsimpa import *
 import uictrl as ui
 
-# works as intended
 def getAvg(rts):
     avgSPL=[]
     numSrc=len(rts)
@@ -19,7 +18,7 @@ def getAvg(rts):
     for k,v in enumerate(avgSPL):
         avgSPL[k] /= numSrc
     return avgSPL
-# works as intended
+
 def getEDT(folderwxid):
     folders=ui.element(folderwxid)
     receivers=[]
@@ -41,30 +40,28 @@ def getEDT(folderwxid):
                             else:
                                 receivers.append(row[1:])
     return receivers, freq, exists
-# un-tested
+    
 def calcSabineAbs(vol,rt):
     sabine=[]
     for val in rt:
         sabine.append((0.161*vol)/(val/1000))
     return sabine
-# un-tested
 def calcPercentageAbs(area,sabine):
     percentage=[]
     for val in sabine:
         percentage.append((val/area)*100)
     return percentage
-# un-tested
 def calcAbsCoeff(bareSabine,sampleSabine,sampleArea):
     absCoeff=[]
     for k,v in enumerate(sampleSabine):
         absCoeff.append(((v-float(bareSabine[k]))/sampleArea)*100)
     return absCoeff
-# un-tested
 def calcSabineFinal(sampleSabine,bareSabine):
     sabineAbs=[]
     for k,v in enumerate(sampleSabine):
         sabineAbs.append(v-float(bareSabine[k]))
     return sabineAbs
+
 # remember to zip(*saveData)
 def SaveFile(saveData,path):
     data=list(saveData)
@@ -93,10 +90,9 @@ class manager:
             return True
         else:
             return False
-        
     def calcAbs(self,elementId):
         uiTitle="Absorption Calculation"
-        userInput1=ui.application.getuserinput(uiTitle,"Input Data Below",{"Volume": "0","Area":"0","Sample Area":"0"})
+        userInput1=ui.application.getuserinput(uiTitle,"Input Data Below",{"Cabin Volume": "0","Cabin Area":"0","Sample Area":"0"})
         grp=ui.e_file(elementId)
         if userInput1[0]:
             areaData=userInput1[1]
@@ -109,8 +105,8 @@ class manager:
                 userInput2=ui.application.getuserinput(uiTitle,"Input Data Below",{"Data Type":["Bare", "Sample"]})
                 if userInput2[0]:
                     if userInput2[1]["Data Type"] == "Bare":
-                        sampleData=calcSabineAbs(int(areaData["Volume"]),avgSPL)
-                        absPercent=calcPercentageAbs(int(areaData["Area"]),sampleData)
+                        sampleData=calcSabineAbs(int(areaData["Cabin Volume"]),avgSPL)
+                        absPercent=calcPercentageAbs(int(areaData["Cabin Area"]),sampleData)
                         sampleData.insert(0,"Sabine")
                         absPercent.insert(0,"Absorption %")
                         saveData=[freq,sampleData,absPercent]
