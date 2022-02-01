@@ -90,7 +90,6 @@ class manager:
             return True
         else:
             return False
-        
     def calcAbs(self,elementId):
         uiTitle="Absorption Calculation"
         userInput1=ui.application.getuserinput(uiTitle,"Input Data Below",{"Cabin Volume": "0","Cabin Area":"0","Sample Area":"0"})
