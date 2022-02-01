@@ -82,7 +82,6 @@ def createXYZ(recMatrix,receivers,freq,selectedFreq):
         x+=1
     return xyz
 
-
 def SaveFile(saveData,path):
     data=list(saveData)
     # Gabe_rw(), stringarray(), floatarray() called from libsimpa
