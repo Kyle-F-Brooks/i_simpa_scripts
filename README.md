@@ -34,13 +34,16 @@ Normally packaged with the software. Edited to remove all source names without d
 ## recp_res_tool
 Combines each value of a chosen measurement into a single file to allow for easier processing of data. Each file gets saved in a folder called "Fused Recievers" and the file name is appended with the measurement that was chosen. The alterations from python 2 -> 3 mean that this doesn't currently work on install alone. Replacement of the libsimpa file is required with the one available in the repository.
 
-## test_python and test_tree
-currently under development.
+## absorption_calc
+Calculates the Absorption Coefficient and the Sabine absorption, uses the early decay time(EDT)
+
+## plot_xyz
+Used to convert a grid of microphone data into a readable format for plotting libraries such as d-plot
+
+## stl_calc
+Calculates the Transmission loss, based on having an excitation receiver.
+
 ### Possible Features
-* STL Calculation
 * STL Hologram
 * Store and return to set camera positions
 * Custom Material Import: CATT Acoustic/li8 Odeon
-
-## other scripts
-I-Simpa related scripts for tasks that don't need to be executed within the program
