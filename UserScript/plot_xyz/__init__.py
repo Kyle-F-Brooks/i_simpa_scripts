@@ -4,6 +4,7 @@
 from libsimpa import *
 import uictrl as ui
 import os
+import math
 
 def getRecNames(receiverData):
     names=[]
@@ -52,6 +53,19 @@ def createMatrix(xVals,yVals,recIds,first,last):
         recMatrix.append(recVals)
     return recMatrix
 
+def removeNaN(receiver):
+    lowestVal=500
+    recId=receiver[0]
+    receiver=receiver[1:]
+    for val in receiver:
+        if val<lowestVal:
+            lowestVal=val
+    for k,v in enumerate(receiver):
+        if math.isnan(v):
+            receiver[k]=lowestVal
+    receiver.insert(0,recId)
+    return receiver
+
 def createXYZ(recMatrix,receivers,freq,selectedFreq):
     xyz=[['','X','Y','Z']]
     x=1
@@ -59,13 +73,15 @@ def createXYZ(recMatrix,receivers,freq,selectedFreq):
     for k1,yList in enumerate(recMatrix):
         y=1
         for k2,receiverId in enumerate(yList):
-            for receiver in receivers:
+            for receiverNaN in receivers:
+                receiver=removeNaN(receiverNaN)
                 if receiver[0]==receiverId:
                     z= receiver[freqIndex]
             xyz.append([receiverId,x,y,z])
             y+=1
         x+=1
     return xyz
+
 
 def SaveFile(saveData,path):
     data=list(saveData)
