@@ -4,6 +4,24 @@
 import libsimpa
 import uictrl as ui
 
+def getSurfaces(elementId):
+    surfaceNames=[]
+    surfaces=ui.element(elementId)
+    for surface in surfaces.childs():
+        surfaceNames.append(surface[2])
+def getUserMaterials(elementId):
+    # need to find element ID of the materials Database. Won't be  findable from the normal elementId
+    materials=[]
+    userMaterials=ui.element(elementId)
+    for material in userMaterials:
+        print(material)
+    return materials
+def generateInputDict(surfaces, materials):
+    inputDict={}
+    for surface in surfaces:
+        inputDict.update({surface:materials})
+    return inputDict
+
 class manager:
     def __init__(self):
         self.linkMaterialsId=ui.application.register_event(self.linkMaterials)
@@ -12,13 +30,10 @@ class manager:
         infos=el.getinfos()
         menu.insert(0,())
         menu.insert(0,(u"Link Materials (WIP)",self.linkMaterialsId))
-        # if infos["name"]==u"Surfaces": # only display menu on Punctual receivers file
-        #     menu.insert(0,())
-        #     menu.insert(0,(u"Link Materials (WIP)",self.linkMaterialsId))
-        #     return True
-        # else:
-        #     return False
         return True
-    def linkMaterials(self):
+    def linkMaterials(self,elementId,y):
         print("This Function is a WIP")
+        getSurfaces(elementId)
+        uiTitle="This function is a work in progress"
+        userInput1=ui.application.getuserinput(uiTitle,"Match Surface to Area",{"List of Surfaces":"Array of Materials"})
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_GROUPESURFACES, manager())
