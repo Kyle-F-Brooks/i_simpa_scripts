@@ -9,6 +9,7 @@ def getSurfaces(elementId):
     surfaces=ui.element(elementId)
     for surface in surfaces.childs():
         surfaceNames.append(surface[2])
+    return surfaceNames
 def getUserMaterials(elementId):
     # need to find element ID of the materials Database. Won't be findable from the normal elementId
     materials=[]
@@ -17,12 +18,14 @@ def getUserMaterials(elementId):
         materials.append(material)
         el=ui.element(material[0])
         infos=el.getinfos()
-        print(infos)
     return materials
 def generateInputDict(surfaces, materials):
     inputDict={}
+    materialId=[]
+    for mat in materials:
+        materialId.append(mat[2])
     for surface in surfaces:
-        inputDict.update({surface:materials})
+        inputDict[surface]=materialId
     return inputDict
 
 # elementId for surfaces is not consistent for all projects
@@ -44,12 +47,17 @@ class manager:
         else:
             return False
     def getMats(self,elementId,y):
-        # print(elementId)
-        getUserMaterials(elementId)
+        print(elementId)
     def linkMaterials(self,elementId,y):
-        print("This Function is a WIP")
-        getSurfaces(elementId)
         uiTitle="This function is a work in progress"
-        userInput1=ui.application.getuserinput(uiTitle,"Match Surface to Area",{"List of Surfaces":"Array of Materials"})
+        userInput1=ui.application.getuserinput(uiTitle,"Input Material Element ID",{"Element ID":"0"})
+        if userInput1[0]:
+            surfaces=getSurfaces(elementId)
+            materials=getUserMaterials(int(userInput1[1]["Element ID"]))
+            print(surfaces)
+            print(materials)
+            inputDict=generateInputDict(surfaces,materials)
+            print(inputDict)
+            userInput2=ui.application.getuserinput(uiTitle,"Match Surface to Area",inputDict)
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_GROUPESURFACES, manager())
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_BDD_MATERIAUX_USER, manager())
