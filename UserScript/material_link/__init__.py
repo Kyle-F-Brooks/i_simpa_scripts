@@ -14,10 +14,15 @@ def getUserMaterials(elementId):
     # need to find element ID of the materials Database. Won't be findable from the normal elementId
     materials=[]
     userMaterials=ui.element(elementId)
-    for material in userMaterials.childs():
-        materials.append(material)
-        el=ui.element(material[0])
-        infos=el.getinfos()
+    all_property=userMaterials.getallelementbytype(ui.element_type.ELEMENT_TYPE_SCENE_GROUPESURFACES_GROUPE)
+    for prop in all_property:
+        ui.element(prop).updatelistconfig("idmat")
+        ui.element(prop).updateentierconfig("idmat")
+    
+    # for material in userMaterials.childs():
+    #     materials.append(material)
+    #     el=ui.element(material[0])
+    #     infos=el.getinfos()
     return materials
 def generateInputDict(surfaces, materials):
     inputDict={}
