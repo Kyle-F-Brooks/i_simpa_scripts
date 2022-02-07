@@ -27,16 +27,20 @@ def generateInputDict(surfaces, materials):
         inputDict[surface]=materialId
     return inputDict
 
-# def setMaterial(selectedDict, elementId, materialGrpId):
-def setMaterial(selectedDict):
+def setMaterial(selectedDict, elementId, materialGrpId):
     # iterate through the surface and check them agains the dict and the materials that they are to be linked to.
-    # userMaterials=ui.element(elementId)
+    # userMaterials=ui.element(materialGrpId)
     # all_property=userMaterials.getallelementbytype(ui.element_type.ELEMENT_TYPE_SCENE_GROUPESURFACES_GROUPE)
     # materialId=0
     # for each surface, get match, see linked material and get elementId of the material
-    for current in selectedDict.items():
-        key=current[0]
-        value=current[1]
+    surfaces=ui.element(elementId)
+    for currentDict in selectedDict.items():
+        currentSurface=currentDict[0]
+        value=currentDict[1]
+        for surface in surfaces:
+            if surface[2]==currentSurface:
+                # set the matid
+                pass
     
     # for prop in all_property:
     #     # C++ code uses a function labeled AppendPropertyInterger(), both functions below take int as an argument
