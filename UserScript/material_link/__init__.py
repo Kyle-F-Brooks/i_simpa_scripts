@@ -14,16 +14,10 @@ def getUserMaterials(elementId):
     # need to find element ID of the materials Database. Won't be findable from the normal elementId
     materials=[]
     userMaterials=ui.element(elementId)
-    all_property=userMaterials.getallelementbytype(ui.element_type.ELEMENT_TYPE_SCENE_GROUPESURFACES_GROUPE)
-    for prop in all_property:
-        ui.element(prop).updatelistconfig("idmat")
-        ui.element(prop).updateentierconfig("idmat")
-    
-    # for material in userMaterials.childs():
-    #     materials.append(material)
-    #     el=ui.element(material[0])
-    #     infos=el.getinfos()
+    for material in userMaterials.childs():
+        materials.append(material)
     return materials
+    
 def generateInputDict(surfaces, materials):
     inputDict={}
     materialId=[]
@@ -32,6 +26,22 @@ def generateInputDict(surfaces, materials):
     for surface in surfaces:
         inputDict[surface]=materialId
     return inputDict
+
+# def setMaterial(selectedDict, elementId, materialGrpId):
+def setMaterial(selectedDict):
+    # iterate through the surface and check them agains the dict and the materials that they are to be linked to.
+    # userMaterials=ui.element(elementId)
+    # all_property=userMaterials.getallelementbytype(ui.element_type.ELEMENT_TYPE_SCENE_GROUPESURFACES_GROUPE)
+    # materialId=0
+    # for each surface, get match, see linked material and get elementId of the material
+    for current in selectedDict.items():
+        key=current[0]
+        value=current[1]
+    
+    # for prop in all_property:
+    #     # C++ code uses a function labeled AppendPropertyInterger(), both functions below take int as an argument
+    #     ui.element(prop).updatelistconfig("idmat", materialId)
+    #     ui.element(prop).updateentierconfig("idmat", materialId)
 
 # elementId for surfaces is not consistent for all projects
 class manager:
@@ -59,10 +69,10 @@ class manager:
         if userInput1[0]:
             surfaces=getSurfaces(elementId)
             materials=getUserMaterials(int(userInput1[1]["Element ID"]))
-            print(surfaces)
-            print(materials)
+            # print(surfaces)
+            # print(materials)
             inputDict=generateInputDict(surfaces,materials)
-            print(inputDict)
             userInput2=ui.application.getuserinput(uiTitle,"Match Surface to Area",inputDict)
+            setMaterial(userInput2[1])
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_GROUPESURFACES, manager())
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_BDD_MATERIAUX_USER, manager())
