@@ -46,9 +46,7 @@ def setMaterial(selectedDict, surfacesId, materialsId):
                         # set the matid
                         # ui.element(surface).updatelistconfig("idmat", int(material[0]))
                         ui.element(surface).updateentierconfig("idmat", material)
-    
-    # for prop in all_property:
-    #     # C++ code uses a function labeled AppendPropertyInterger(), both functions below take int as an argument
+                        # issue could be with "idmat" != struct _object * __ptr64
 
 # elementId for surfaces is not consistent for all projects
 class manager:
