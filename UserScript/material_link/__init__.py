@@ -42,9 +42,13 @@ def setMaterial(selectedDict, surfacesId, materialsId):
                 materials=ui.element(materialsId)
                 for material in materials.childs():
                     if material[2]==materialName:
-                        # print(material)
+                        print(material)
+                        matId=int(material[0])
+                        print(matId)
+                        target=ui.element(matId)
+                        print(target)
                         # set the matid
-                        ui.element(surface).updatelistconfig("idmat", int(material[0]))
+                        ui.element(surface).updatelistconfig("idmateriau", target)
                         # ui.element(surface).updateentierconfig("idmat", material)
                         # issue could be with "idmat" != struct _object * __ptr64
 
