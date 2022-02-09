@@ -44,8 +44,8 @@ def setMaterial(selectedDict, surfacesId, materialsId):
                     if material[2]==materialName:
                         # print(material)
                         # set the matid
-                        # ui.element(surface).updatelistconfig("idmat", int(material[0]))
-                        ui.element(surface).updateentierconfig("idmat", material)
+                        ui.element(surface).updatelistconfig("idmat", int(material[0]))
+                        # ui.element(surface).updateentierconfig("idmat", material)
                         # issue could be with "idmat" != struct _object * __ptr64
 
 # elementId for surfaces is not consistent for all projects
