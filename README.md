@@ -1,7 +1,9 @@
 # I-Simpa Scripts
 Author: Kyle Brooks
 
-The convert_all_tool, recp_res_tool, source_tools and libsimpa scripts are modified by Kyle Brooks and not originally written.
+Modified Scripts: convert_all_tool, recp_res_tool, source_tools, libsimpa
+
+Custom Scripts: plot_xyz, stl_calc, absorption_calc
 
 Please check my other repositories for the python 2 scripts
 
