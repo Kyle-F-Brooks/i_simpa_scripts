@@ -11,9 +11,15 @@ def getRecNames(receiverData):
     for rec in receiverData:
         names.append(rec[0])
     return names
-
-def readFusionGabe(folderwxid):
-    folders=ui.element(folderwxid)
+def GetSourceNames(elementId):
+    # read through the file 
+    files=ui.element(elementId)
+    sources=[]
+    for file in files.childs():
+        sources.append(file[2][:-14])
+    return sources
+def readFusionGabe(elementId):
+    folders=ui.element(elementId)
     receivers=[]
     exists=False
     freq=None
@@ -134,18 +140,21 @@ class manager:
         else:
             return False
     def contributionMatrix(self,elementId):
+        sourceNames=GetSourceNames(elementId)
         folder=ui.e_file(elementId)
         sources,freq=readContributionGabe(elementId)
         uiTitle="Plot XYZ"
         recIds=getRecNames(sources[0])
         userInput1=ui.application.getuserinput(uiTitle,"Please input the matrix dimensions", {"First Receiver":recIds,"Last Receiver":recIds,"X Dimension":"0","Y Dimension":"0","Frequency":freq[1:]})
         if userInput1[0]:
+            MakeDir(elementId)
+            counter=0
             for source in sources:
                 recMatrix=createMatrix(int(userInput1[1]["X Dimension"]),int(userInput1[1]["Y Dimension"]),recIds,userInput1[1]["First Receiver"],userInput1[1]["Last Receiver"])
                 xyz=createXYZ(recMatrix,source,freq,userInput1[1]["Frequency"])
-                MakeDir(elementId)
                 targetFreq=userInput1[1]["Frequency"]
-                SaveFile(zip(*xyz),folder.buildfullpath()+f"XYZ Plots\{source}_{targetFreq}_XYZ.gabe")
+                SaveFile(zip(*xyz),folder.buildfullpath()+f"XYZ Plots\{sourceNames[counter]}_{targetFreq}_XYZ.gabe")
+                counter+=1
             ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
     def receiverMatrix(self,elementId):
         folder=ui.e_file(elementId)
