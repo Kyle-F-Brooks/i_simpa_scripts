@@ -11,9 +11,15 @@ def getRecNames(receiverData):
     for rec in receiverData:
         names.append(rec[0])
     return names
-
-def readGabe(folderwxid):
-    folders=ui.element(folderwxid)
+def GetSourceNames(elementId):
+    # read through the file 
+    files=ui.element(elementId)
+    sources=[]
+    for file in files.childs():
+        sources.append(file[2][:-14])
+    return sources
+def readFusionGabe(elementId):
+    folders=ui.element(elementId)
     receivers=[]
     exists=False
     freq=None
@@ -34,7 +40,23 @@ def readGabe(folderwxid):
                             else:
                                 receivers.append(row)
     return receivers, freq, exists
-
+def readContributionGabe(elementId):
+    files=ui.element(elementId)
+    sources=[]
+    freq=None
+    for file in files.childs():
+        document=ui.e_file(file[0])
+        receivers=[]
+        dataFile=ui.application.getdataarray(document)
+        for dataRow in dataFile:
+            if dataRow[0]=='':
+                dataRow[0]='Frequency'
+                freq=dataRow
+            else:
+                receivers.append(dataRow)
+        sources.append(receivers)
+    return sources, freq
+                
 def createMatrix(xVals,yVals,recIds,first,last):
     # recIds is an array of all the receiver IDs
     recCounter=0
@@ -96,27 +118,47 @@ def SaveFile(saveData,path):
             datacol.append(float(cell))
         gabewriter.AppendFloatCol(datacol,str(col[0]))
     gabewriter.Save(path.encode('cp1252'))
+def MakeDir(elementId):
+    grp=ui.e_file(elementId)
+    targetPath=grp.buildfullpath()+ r"\XYZ Plots"
+    if not os.path.exists(targetPath):
+        os.mkdir(targetPath)
 
 class manager:
     def __init__(self):
         self.receiverMatrixId=ui.application.register_event(self.receiverMatrix)
+        self.contributionMatrixId=ui.application.register_event(self.contributionMatrix)
     def getmenu(self,elementType,elementId,menu):
         el=ui.element(elementId)
         infos=el.getinfos()
         if infos["name"]==u"Punctual receivers": # only display menu on Punctual receivers file
-            menu.insert(0,())
             menu.insert(0,(u"Plot as XYZ",self.receiverMatrixId))
             return True
+        if infos["name"]=="Source Contributions":
+            menu.insert(0,())
+            menu.insert(0,(u"Plot as XYZ",self.contributionMatrixId))
         else:
             return False
-    def MakeDir(self, elementId):
-        grp=ui.e_file(elementId)
-        targetPath=grp.buildfullpath()+ r"\XYZ Plots"
-        if not os.path.exists(targetPath):
-            os.mkdir(targetPath)
+    def contributionMatrix(self,elementId):
+        sourceNames=GetSourceNames(elementId)
+        folder=ui.e_file(elementId)
+        sources,freq=readContributionGabe(elementId)
+        uiTitle="Plot XYZ"
+        recIds=getRecNames(sources[0])
+        userInput1=ui.application.getuserinput(uiTitle,"Please input the matrix dimensions", {"First Receiver":recIds,"Last Receiver":recIds,"X Dimension":"0","Y Dimension":"0","Frequency":freq[1:]})
+        if userInput1[0]:
+            MakeDir(elementId)
+            counter=0
+            for source in sources:
+                recMatrix=createMatrix(int(userInput1[1]["X Dimension"]),int(userInput1[1]["Y Dimension"]),recIds,userInput1[1]["First Receiver"],userInput1[1]["Last Receiver"])
+                xyz=createXYZ(recMatrix,source,freq,userInput1[1]["Frequency"])
+                targetFreq=userInput1[1]["Frequency"]
+                SaveFile(zip(*xyz),folder.buildfullpath()+f"XYZ Plots\{sourceNames[counter]}_{targetFreq}_XYZ.gabe")
+                counter+=1
+            ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
     def receiverMatrix(self,elementId):
-        grp=ui.e_file(elementId)
-        receivers,freq,exists=readGabe(elementId)
+        folder=ui.e_file(elementId)
+        receivers,freq,exists=readFusionGabe(elementId)
         if not exists:
             print("Please Merge Recevier SPL")
         elif exists:
@@ -126,9 +168,9 @@ class manager:
             if userInput1[0]:
                 recMatrix=createMatrix(int(userInput1[1]["X Dimension"]),int(userInput1[1]["Y Dimension"]),recIds,userInput1[1]["First Receiver"],userInput1[1]["Last Receiver"])
                 xyz=createXYZ(recMatrix,receivers,freq,userInput1[1]["Frequency"])
-                self.MakeDir(elementId)
+                MakeDir(elementId)
                 targetFreq=userInput1[1]["Frequency"]
-                SaveFile(zip(*xyz),grp.buildfullpath()+f"XYZ Plots\{targetFreq}_XYZ.gabe")
+                SaveFile(zip(*xyz),folder.buildfullpath()+f"XYZ Plots\{targetFreq}_XYZ.gabe")
                 ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
 
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_REPORT_FOLDER, manager()) # alter here based on menu location
