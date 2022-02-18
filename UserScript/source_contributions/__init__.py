@@ -81,7 +81,7 @@ class manager:
         el=ui.element(elementId)
         infos=el.getinfos()
         if infos["name"]=="Punctual receivers": # only display menu on Punctual receivers file
-            menu.insert(0,("Get Source Contributions (WIP)",self.getSrcContId))
+            menu.insert(0,("Get Source Contributions",self.getSrcContId))
             return True
         else:
             return False
