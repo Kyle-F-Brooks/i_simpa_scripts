@@ -42,8 +42,17 @@ Calculates the Absorption Coefficient and the Sabine absorption, uses the early 
 ## plot_xyz
 Used to convert a grid of microphone data into a readable format for plotting libraries such as d-plot
 
+## source_contributions
+Used to get the specific source contribution for each microphone and output a file for each source with the spl reading at each receiver
+
+## plot_xyz
+Used to convert a grid of microphone data into a readable format for plotting libraries such as d-plot, can read the output of the source contributions
+
 ## stl_calc
 Calculates the Transmission loss, based on having an excitation receiver.
+
+## material_link (WIP)
+this function is currently not imported into I-simpa. It has an issue regarding the source code.
 
 ### Possible Features
 * STL Hologram
