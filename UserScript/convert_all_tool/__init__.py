@@ -10,9 +10,9 @@ import libsimpa
 import csv
 import os
 
-def do_convert_all(folderwxid):
+def do_convert_all(elementId):
     # takes the gabe file and outputs it as a csv
-    folder=ui.element(folderwxid)
+    folder=ui.element(elementId)
     for el in folder.childs():
         if el[1] == ui.element_type.ELEMENT_TYPE_REPORT_FOLDER:
             do_convert_all(el[0])
@@ -28,17 +28,17 @@ class manager:
     def __init__(self):
         # register function for menu button
         self.OnConvertAllid=ui.application.register_event(self.OnConvertAll)
-    def getmenu(self,typeel,idel,menu):
+    def getmenu(self,elementType,elementId,menu):
         # create and link the menu button with its function
-        el=ui.element(idel)
+        el=ui.element(elementId)
         infos=el.getinfos()
         menu.insert(0,())
         menu.insert(0,(u"Convert all files in sub-directories to CSV",self.OnConvertAllid))
         return True
         
-    def OnConvertAll(self,idel):
+    def OnConvertAll(self,elementId):
         print("\nCSV Conversion: Processing") # prints to python console
-        do_convert_all(idel) # call conversion function
+        do_convert_all(elementId) # call conversion function
         ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER) # reload folders to make new files visible
         print("\nCSV Conversion: Complete") # prints to python console
 # register new button in program and tell it where to make it available
