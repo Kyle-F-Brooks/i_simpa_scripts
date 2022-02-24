@@ -22,9 +22,19 @@ class mdf(ui.element):
             #User options
             coreconf.appendpropertylist("solver_mode","Calculation mode",[["Time","Static"],[0,1]],0,False,1,True)
             coreconf.appendpropertybool("with_direct_sound","Use direct sound",True,True)
-            _("Calculation mode")
-            _("Use direct sound")
-            _("Time")
-            _("Static")
         else:
             pass #Here in case of loading an existing project
+    def gettreelabel(self):
+        """
+        Return label
+        """
+        return "Mdf"
+    def modified(self,idelmodified):
+        #In case of sub element modification this func is call by ui
+        #We disable the time dependant parameters in case of static solver mode
+        if ui.element(idelmodified).getinfos()["name"]=="solver_mode":
+            elconf=ui.element(self.getelementbytype(ui.element_type.ELEMENT_TYPE_CORE_CORE_CONFIG))
+            is_temporal=(elconf.getlistconfig("solver_mode")==0)
+            elconf.setreadonlyconfig("duree_simulation",not is_temporal)
+            elconf.setreadonlyconfig("pasdetemps",not is_temporal)
+            ui.element.modified(self,idelmodified)
