@@ -5,11 +5,11 @@ import uictrl as ui
 from libsimpa import *
 
 # this function works
-def getNames(folderwxid):
+def getNames(elementId):
     # if using the fusion files, it may not be needed to get the receiver element dicts.
     receivers=[] # array of receiver element dicts
     names=[] # array of receiver names
-    folder=ui.element(folderwxid) # set folder
+    folder=ui.element(elementId) # set folder
     recplist=folder.getallelementbytype(ui.element_type.ELEMENT_TYPE_REPORT_FOLDER) # get all folders in folder
     for idrecp in recplist: # for each folder get info
         recp=ui.element(idrecp)
@@ -21,10 +21,10 @@ def getNames(folderwxid):
     return names
 
 # This function works
-def getVals(folderwxid, recid):
+def getVals(elementId, recid):
     receivers=[]
     srcrec=None
-    folders=ui.element(folderwxid)
+    folders=ui.element(elementId)
     exists=False
     for folder in folders.childs():
         if folder[2]=="Fused Receivers": # speciically find the Fused Receivers folder

@@ -16,7 +16,8 @@ def GetSourceNames(elementId):
     files=ui.element(elementId)
     sources=[]
     for file in files.childs():
-        sources.append(file[2][:-14])
+        if file[1]==ui.element_type.ELEMENT_TYPE_REPORT_GABE:
+            sources.append(file[2][:-14])
     return sources
 def readFusionGabe(elementId):
     folders=ui.element(elementId)
@@ -45,16 +46,17 @@ def readContributionGabe(elementId):
     sources=[]
     freq=None
     for file in files.childs():
-        document=ui.e_file(file[0])
-        receivers=[]
-        dataFile=ui.application.getdataarray(document)
-        for dataRow in dataFile:
-            if dataRow[0]=='':
-                dataRow[0]='Frequency'
-                freq=dataRow
-            else:
-                receivers.append(dataRow)
-        sources.append(receivers)
+        if file[1] == ui.element_type.ELEMENT_TYPE_REPORT_GABE:
+            document=ui.e_file(file[0])
+            receivers=[]
+            dataFile=ui.application.getdataarray(document)
+            for dataRow in dataFile:
+                if dataRow[0]=='':
+                    dataRow[0]='Frequency'
+                    freq=dataRow
+                else:
+                    receivers.append(dataRow)
+            sources.append(receivers)
     return sources, freq
                 
 def createMatrix(xVals,yVals,recIds,first,last):
@@ -140,10 +142,10 @@ class manager:
         else:
             return False
     def contributionMatrix(self,elementId):
-        sourceNames=GetSourceNames(elementId)
         folder=ui.e_file(elementId)
-        sources,freq=readContributionGabe(elementId)
         uiTitle="Plot XYZ"
+        sourceNames=GetSourceNames(elementId)
+        sources,freq=readContributionGabe(elementId)
         recIds=getRecNames(sources[0])
         userInput1=ui.application.getuserinput(uiTitle,"Please input the matrix dimensions", {"First Receiver":recIds,"Last Receiver":recIds,"X Dimension":"0","Y Dimension":"0","Frequency":freq[1:]})
         if userInput1[0]:

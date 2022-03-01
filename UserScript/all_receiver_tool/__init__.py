@@ -6,9 +6,9 @@
 # Directivity Lines can now be hidden but not re-enabled.
 import uictrl as ui
 
-def set_direc_display(idgrp):
+def set_direc_display(elementId):
     # Sets the directivity bar to zero meaning it no longer shows. Cannot toggle it back on
-    grpsrc=ui.element(idgrp)
+    grpsrc=ui.element(elementId)
     all_property=grpsrc.getallelementbytype(ui.element_type.ELEMENT_TYPE_SCENE_RECEPTEURSP_RECEPTEUR_PROPRIETES) 
     for prop in all_property:
         # edits "Direction X", "Direction Y" & "Direction Z"
@@ -16,9 +16,9 @@ def set_direc_display(idgrp):
         ui.element(prop).updatedecimalconfig("v",0) #Y
         ui.element(prop).updatedecimalconfig("w",0) #Z
 
-def set_receiver_activation(idgrp,newstate):
+def set_receiver_activation(elementId,newstate):
     # depending on input, will show or hide the name label
-    grpsrc=ui.element(idgrp)
+    grpsrc=ui.element(elementId)
     all_property=grpsrc.getallelementbytype(ui.element_type.ELEMENT_TYPE_SCENE_RECEPTEURSP_RECEPTEUR_RENDU) 
     for prop in all_property:
         ui.element(prop).updateboolconfig("showlabel",newstate)
@@ -30,7 +30,7 @@ class manager:
         self.disable_receiver_namesid=ui.application.register_event(self.disable_receiver_names)
         self.disable_direc_dispid=ui.application.register_event(self.disable_direc_disp)
 
-    def getmenu(self,typeel,idel,menu):
+    def getmenu(self,elementType,elementId,menu):
         # create menu buttons and link them to their functions
         submenu=[(u"Enable Names", self.enable_receiver_namesid),
         (u"Disable Names", self.disable_receiver_namesid),
@@ -39,16 +39,16 @@ class manager:
         menu.insert(2,(u"All Receievers", submenu))
         return True
 
-    def enable_receiver_names(self, idgrp):
-        set_receiver_activation(idgrp, True)
+    def enable_receiver_names(self, elementId):
+        set_receiver_activation(elementId, True)
         print("Enabled: Punctual Receiver Names\n")
 
-    def disable_receiver_names(self, idgrp):
-        set_receiver_activation(idgrp, False)
+    def disable_receiver_names(self, elementId):
+        set_receiver_activation(elementId, False)
         print("Disabled: Punctual Receiver Names\n")
         
-    def disable_direc_disp(self, idgrp):
-        set_direc_display(idgrp)
+    def disable_direc_disp(self, elementId):
+        set_direc_display(elementId)
         print("Disabled: Directivity Lines\n")
 
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_RECEPTEURSP, manager())

@@ -5,9 +5,9 @@ from libsimpa import *
 import uictrl as ui
 import os
 
-def GetSources(folderwxid):
+def GetSources(elementId):
     # read through the file 
-    folders=ui.element(folderwxid)
+    folders=ui.element(elementId)
     sources=[]
     freq=[]
     for folder in folders.childs():
