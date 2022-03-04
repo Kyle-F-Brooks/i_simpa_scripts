@@ -14,7 +14,7 @@ def getNames(elementId):
     for idrecp in recplist: # for each folder get info
         recp=ui.element(idrecp)
         infos=recp.getinfos()
-        if not infos["label"]=="Fused Receivers": # if receiver folder append to array receivers 
+        if infos["label"]!="Fused Receivers" and infos["label"]!="Source Contributions" and infos["label"]!="XYZ Plots": # if receiver folder append to array receivers 
             receivers.append(infos)
     for receiver in receivers: # for each stored receiver append "label property to array names"
         names.append(receiver["label"])

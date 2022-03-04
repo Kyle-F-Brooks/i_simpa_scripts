@@ -109,7 +109,6 @@ class manager:
         grpsrc=ui.element(idgrp)
         all_property=grpsrc.getallelementbytype(ui.element_type.ELEMENT_TYPE_SCENE_SOURCES_SOURCE_PROPRIETES)
         for prop in all_property:
-            print(prop)
             ui.element(prop).updateboolconfig("enable",newstate)
 
     def enable_grp_sources(self,idgrp):
