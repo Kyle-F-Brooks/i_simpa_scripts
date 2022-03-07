@@ -114,7 +114,7 @@ class manager:
         names=getNames(elementId) 
         uiTitle="STL Calculation"
         grp=ui.e_file(elementId)
-        userInput1=ui.application.getuserinput(uiTitle,(u"Pick a Reciever from the list"),{"Excitation Receiver": names})
+        userInput1=ui.application.getuserinput(uiTitle,(u"Pick the Excitation Receiver from the list"),{"Excitation Receiver": names})
         if userInput1[0]:
             recid=userInput1[1]["Excitation Receiver"]
             srcrec,receivers,exists=getVals(elementId, recid)
