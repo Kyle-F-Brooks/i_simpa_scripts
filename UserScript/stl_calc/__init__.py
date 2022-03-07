@@ -3,6 +3,7 @@
 
 import uictrl as ui
 from libsimpa import *
+import os
 
 # this function works
 def getNames(elementId):
@@ -14,7 +15,7 @@ def getNames(elementId):
     for idrecp in recplist: # for each folder get info
         recp=ui.element(idrecp)
         infos=recp.getinfos()
-        if infos["label"]!="Fused Receivers" and infos["label"]!="Source Contributions" and infos["label"]!="XYZ Plots": # if receiver folder append to array receivers 
+        if infos["label"]!="Fused Receivers" and infos["label"]!="Source Contributions" and infos["label"]!="XYZ Plots" and infos["label"]!="Transmission Loss": # if receiver folder append to array receivers 
             receivers.append(infos)
     for receiver in receivers: # for each stored receiver append "label property to array names"
         names.append(receiver["label"])
@@ -45,8 +46,29 @@ def getVals(elementId, recid):
                                 receivers.append(row) # any row not handled by code above gets added to the receiever list
     return srcrec, receivers, exists
 
+def calcSTL(srcrecInput,recsInput,qffInput,lfInput):
+    freq=('','100 Hz','125 Hz','160 Hz','200 Hz','250 Hz','315 Hz','400 Hz','500 Hz','630 Hz','800 Hz','1000 Hz','1250 Hz','1600 Hz','2000 Hz','2500 Hz','3150 Hz','4000 Hz','5000 Hz','6300 Hz','8000 Hz','10000 Hz')
+    saveData=[freq]
+    qff=list(qffInput.values())
+    lf=list(lfInput.values())
+    srcrec=list(srcrecInput)
+    correction=[0]
+    for val in qff:
+        correction.append(float(val))
+    for k,v in enumerate(lf):
+        correction[k]+=float(v)
+    for rec in recsInput:
+        stl=[]
+        for k,v in enumerate(srcrec):
+            if k==0:
+                stl.append(rec[k])
+            else:
+                stl.append(str(float(v)-6-float(rec[k])+correction[k]))
+        saveData.append(stl)
+    return saveData
+
 # this function works
-def calcSTL(srcrecInput, recsInput, qffInput, lfInput): # srcrec-source receiver, recs list of other receivers, qff-list of qff vals, lf - list of lf correction vals 
+def calcAvgSTL(srcrecInput, recsInput, qffInput, lfInput): # srcrec-source receiver, recs list of other receivers, qff-list of qff vals, lf - list of lf correction vals 
     stl=[] # =srcrec-6-avgSPL+correction
     # create average of all receivers bar src rec
     qff=list(qffInput.values())
@@ -81,7 +103,7 @@ def calcSTL(srcrecInput, recsInput, qffInput, lfInput): # srcrec-source receiver
     stl.insert(0,'STL')
     save=[freq,stl]
     return save
-    
+
 def SaveFile(saveData,path):
     data=list(saveData)
     # Gabe_rw(), stringarray(), floatarray() called from libsimpa
@@ -96,6 +118,12 @@ def SaveFile(saveData,path):
             datacol.append(float(cell))
         gabewriter.AppendFloatCol(datacol,str(col[0]))
     gabewriter.Save(path.encode('cp1252'))    
+
+def MakeDir(elementId):
+    currentPath=ui.e_file(elementId)
+    dirPath=currentPath.buildfullpath()+ r"\Transmission Loss"
+    if not os.path.exists(dirPath):
+        os.mkdir(dirPath)
 
 class manager:
     def __init__(self):
@@ -126,8 +154,11 @@ class manager:
                 if userInput2[0]:
                     userInput3=ui.application.getuserinput(uiTitle,(u"Please Input Low Frequency Correction"),freqRange)
                     if userInput3[0]:
-                        saveData=calcSTL(srcrec, receivers, userInput2[1], userInput3[1])
-                        SaveFile(zip(*saveData),grp.buildfullpath()+r"STL Calculation.gabe")
+                        saveAvgData=calcAvgSTL(srcrec, receivers, userInput2[1], userInput3[1])
+                        saveData=calcSTL(srcrec,receivers,userInput2[1],userInput3[1])
+                        MakeDir(elementId)
+                        SaveFile(zip(*saveData),grp.buildfullpath()+r"Transmission Loss\STL Data.gabe")
+                        SaveFile(zip(*saveAvgData),grp.buildfullpath()+r"Transmission Loss\Average STL Data.gabe")
                         ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
 
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_REPORT_FOLDER, manager()) # alter here based on menu location
