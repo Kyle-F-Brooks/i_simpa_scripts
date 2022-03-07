@@ -19,6 +19,8 @@ def GetSourceNames(elementId):
         if file[1]==ui.element_type.ELEMENT_TYPE_REPORT_GABE:
             sources.append(file[2][:-14])
     return sources
+
+# read gabe files in
 def readFusionGabe(elementId):
     folders=ui.element(elementId)
     receivers=[]
@@ -58,6 +60,21 @@ def readContributionGabe(elementId):
                     receivers.append(dataRow)
             sources.append(receivers)
     return sources, freq
+def readTransmissionGabe(elementId):
+    files=ui.element(elementId)
+    freq=None
+    for file in files.childs():
+        if file[2]=='STL Data':
+            document=ui.e_file(file[0])
+            receivers=[]
+            dataFile=ui.application.getdataarray(document)
+            for dataRow in dataFile:
+                if dataRow[0]=='':
+                    dataRow[0]=='Frequency'
+                    freq=dataRow
+                else:
+                    receivers.append(dataRow)
+    return receivers, freq
                 
 def createMatrix(xVals,yVals,recIds,first,last):
     # recIds is an array of all the receiver IDs
@@ -130,6 +147,7 @@ class manager:
     def __init__(self):
         self.receiverMatrixId=ui.application.register_event(self.receiverMatrix)
         self.contributionMatrixId=ui.application.register_event(self.contributionMatrix)
+        self.transmissionMatrixId=ui.application.register_event(self.transmissionMatrix)
     def getmenu(self,elementType,elementId,menu):
         el=ui.element(elementId)
         infos=el.getinfos()
@@ -139,8 +157,25 @@ class manager:
         if infos["name"]=="Source Contributions":
             menu.insert(0,())
             menu.insert(0,(u"Plot as XYZ",self.contributionMatrixId))
+        if infos["name"]=="Transmission Loss":
+            menu.insert(0,())
+            menu.insert(0,(u"Plot as XYZ",self.transmissionMatrixId))
         else:
             return False
+    def transmissionMatrix(self, elementId):
+        folder=ui.e_file(elementId)
+        uiTitle="Plot XYZ"
+        receivers,freq=readTransmissionGabe(elementId)
+        recIds=getRecNames(receivers)
+        userInput1=ui.application.getuserinput(uiTitle,"Please input the matrix dimensions", {"First Receiver":recIds,"Last Receiver":recIds,"X Dimension":"0","Y Dimension":"0","Frequency":freq[1:]})
+        if userInput1[0]:
+            MakeDir(elementId)
+            recMatrix=createMatrix(int(userInput1[1]["X Dimension"]),int(userInput1[1]["Y Dimension"]),recIds,userInput1[1]["First Receiver"],userInput1[1]["Last Receiver"])
+            xyz=createXYZ(recMatrix,receivers,freq,userInput1[1]["Frequency"])
+            targetFreq=userInput1[1]["Frequency"]
+            SaveFile(zip(*xyz),folder.buildfullpath()+f"XYZ Plots\{targetFreq}_STL_XYZ.gabe")
+            ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
+            
     def contributionMatrix(self,elementId):
         folder=ui.e_file(elementId)
         uiTitle="Plot XYZ"
