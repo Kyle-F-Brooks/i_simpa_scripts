@@ -54,8 +54,8 @@ def calcSTL(srcrecInput,recsInput,qffInput,lfInput):
     srcrec=list(srcrecInput)
     # Create correction factor
     correction=[]
-    for k,v in qff:
-        correction.append(float(v))
+    for val in qff:
+        correction.append(float(val))
     for k,v in enumerate(lf):
         correction[k]+=float(v)
     correction.insert(0,'Correction')
