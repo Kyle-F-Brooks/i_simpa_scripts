@@ -37,7 +37,6 @@ class manager:
         return True
         
     def OnConvertAll(self,elementId):
-        print("\nCSV Conversion: Processing") # prints to python console
         do_convert_all(elementId) # call conversion function
         ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER) # reload folders to make new files visible
         print("\nCSV Conversion: Complete") # prints to python console
