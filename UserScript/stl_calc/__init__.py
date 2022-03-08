@@ -63,7 +63,7 @@ def calcSTL(srcrecInput,recsInput,qffInput,lfInput):
             if k==0:
                 stl.append(rec[k])
             else:
-                stl.append(str(float(v)-6-float(rec[k])+correction[k]))
+                stl.append(str(float(v)-6-float(rec[k])+correction[k-1]))
         saveData.append(stl)
     return saveData
 
