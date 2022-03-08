@@ -54,11 +54,8 @@ def calcSTL(srcrecInput,recsInput,qffInput,lfInput):
     srcrec=list(srcrecInput)
     # Create correction factor
     correction=[]
-    for val in qff:
-        correction.append(float(val))
-    for k,v in enumerate(lf):
-        correction[k]+=float(v)
-    correction.insert(0,'Correction')
+    for k,v in enumerate(qff):
+        correction.append((float(v)+float(lf[k])))
     # calculate transmission loss to each receiver
     for rec in recsInput:
         stl=[]
@@ -95,10 +92,8 @@ def calcAvgSTL(srcrecInput, recsInput, qffInput, lfInput): # srcrec-source recei
         avgSPL[k] /= numRec
     # correction factor
     correction=[]
-    for val in qff:
-        correction.append(float(val))
-    for k,v in enumerate(lf):
-        correction[k]+=float(v)
+    for k,v in enumerate(qff):
+        correction.append((float(v)+float(lf[k])))
     # stl calculation
     for k,v in enumerate(srcrec):
         stl.append(str(float(v)-6-avgSPL[k]+correction[k]))
