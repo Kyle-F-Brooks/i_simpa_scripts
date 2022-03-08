@@ -43,6 +43,7 @@ def readFusionGabe(elementId):
                             else:
                                 receivers.append(row)
     return receivers, freq, exists
+    
 def readContributionGabe(elementId):
     files=ui.element(elementId)
     sources=[]
@@ -60,6 +61,7 @@ def readContributionGabe(elementId):
                     receivers.append(dataRow)
             sources.append(receivers)
     return sources, freq
+
 def readTransmissionGabe(elementId):
     files=ui.element(elementId)
     freq=None
@@ -157,9 +159,11 @@ class manager:
         if infos["name"]=="Source Contributions":
             menu.insert(0,())
             menu.insert(0,(u"Plot as XYZ",self.contributionMatrixId))
+            return True
         if infos["name"]=="Transmission Loss":
             menu.insert(0,())
             menu.insert(0,(u"Plot as XYZ",self.transmissionMatrixId))
+            return True
         else:
             return False
     def transmissionMatrix(self, elementId):
