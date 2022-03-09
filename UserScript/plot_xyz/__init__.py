@@ -194,7 +194,6 @@ class manager:
             counter=0
             for source in sources:
                 recMatrix=createMatrix(int(userInput1[1]["X Dimension"]),int(userInput1[1]["Y Dimension"]),recIds,userInput1[1]["First Receiver"],userInput1[1]["Last Receiver"])
-                print(recMatrix)
                 xyz=createXYZ(recMatrix,source,freq,userInput1[1]["Frequency"])
                 targetFreq=userInput1[1]["Frequency"]
                 SaveFile(zip(*xyz),folder.buildfullpath()+f"XYZ Plots\{sourceNames[counter]}_{targetFreq}_XYZ.gabe")
