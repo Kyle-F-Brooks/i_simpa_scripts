@@ -81,25 +81,23 @@ def readTransmissionGabe(elementId):
             freq[0]='Frequency'
             receivers=dataFile[1:]
     return receivers, freq
-                
+# create a matrix describing the location of the receviers in the grid            
 def createMatrix(xVals,yVals,recIds,first,last):
-    # recIds is an array of all the receiver IDs
-    recCounter=0
+    # get list of receivers in the array
+    firstIndex=recIds.index(first)
+    lastIndex=recIds.index(last)
+    receiverList=recIds[firstIndex:(lastIndex+1)]
     recMatrix=[]
-    startLogging=False
+    recCounter=0
+    # create the matrix based on the user input x y values
     for x in range(xVals):
         recVals=[]
         for y in range(yVals):
-            if recIds[recCounter]==first:
-                startLogging=True
-            if startLogging:
-                recVals.append(recIds[recCounter])
-            if recIds[recCounter]==last:
-                startLogging=False
+            recVals.append(receiverList[recCounter])
             recCounter+=1
         recMatrix.append(recVals)
     return recMatrix
-
+# search through the input data and if any values are NaN, make them equal to the lowest value in the array
 def removeNaN(receiver):
     lowestVal=500
     recId=receiver[0]
@@ -112,7 +110,7 @@ def removeNaN(receiver):
             receiver[k]=lowestVal
     receiver.insert(0,recId)
     return receiver
-
+# take the input matrix and the data to create the xyz plot
 def createXYZ(recMatrix,receivers,freq,selectedFreq):
     xyz=[['','X','Y','Z']]
     x=1
@@ -195,7 +193,6 @@ class manager:
             MakeDir(elementId)
             counter=0
             for source in sources:
-                # ISSUE HERE
                 recMatrix=createMatrix(int(userInput1[1]["X Dimension"]),int(userInput1[1]["Y Dimension"]),recIds,userInput1[1]["First Receiver"],userInput1[1]["Last Receiver"])
                 print(recMatrix)
                 xyz=createXYZ(recMatrix,source,freq,userInput1[1]["Frequency"])
