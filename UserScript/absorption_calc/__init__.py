@@ -116,7 +116,7 @@ class manager:
                         userInput3=ui.application.getuserinput(uiTitle, "Input bare data", freqRange)
                         if userInput3[0]:
                             bareData=list(userInput3[1].values())
-                            sampleData=calcSabineAbs(int(areaData["Volume"]),avgSPL)
+                            sampleData=calcSabineAbs(int(areaData["Cabin Volume"]),avgSPL)
                             absCoeff=calcAbsCoeff(bareData,sampleData,int(areaData["Sample Area"]))
                             sabineAbs=calcSabineFinal(sampleData,bareData)
                             absCoeff.insert(0,"Absorption Coefficient")
