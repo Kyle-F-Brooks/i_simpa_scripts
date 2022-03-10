@@ -6,13 +6,14 @@ import uictrl as ui
 import os
 import math
 
+# read through array of arrays structured in a frequency against receiver table
 def getRecNames(receiverData):
     names=[]
     for rec in receiverData:
         names.append(rec[0])
     return names
+# reads source contribution file names to get the specific source names
 def GetSourceNames(elementId):
-    # read through the file 
     files=ui.element(elementId)
     sources=[]
     for file in files.childs():
@@ -20,12 +21,14 @@ def GetSourceNames(elementId):
             sources.append(file[2][:-14])
     return sources
 
-# read gabe files in
+# read fusionSPL gabe file in
 def readFusionGabe(elementId):
+    # initialise variables
     folders=ui.element(elementId)
     receivers=[]
     exists=False
     freq=None
+    # find the fusionSPL file in the Fused Receivers folder
     for folder in folders.childs():
         if folder[2]=="Fused Receivers":
             files=ui.element(folder[0])
@@ -43,59 +46,58 @@ def readFusionGabe(elementId):
                             else:
                                 receivers.append(row)
     return receivers, freq, exists
-    
+# read the source contribution files in
 def readContributionGabe(elementId):
+    # initialise variables
     files=ui.element(elementId)
     sources=[]
     freq=None
     for file in files.childs():
+        # check element type
         if file[1] == ui.element_type.ELEMENT_TYPE_REPORT_GABE:
+            # open the report and read the data from it
             document=ui.e_file(file[0])
-            receivers=[]
             dataFile=ui.application.getdataarray(document)
-            for dataRow in dataFile:
-                if dataRow[0]=='':
-                    dataRow[0]='Frequency'
-                    freq=dataRow
-                else:
-                    receivers.append(dataRow)
+            # sort the data into frequency, extract each receiver line into list
+            receivers=dataFile[1:]
+            freq=dataFile[0]
+            freq[0]='Frequency'
+            # store each receivers in sources creating [[[Recevier 1],[Receiver 2]],[[Receiver 1],[Receiver 2]]]
             sources.append(receivers)
     return sources, freq
-
+# read STL gabe file in
 def readTransmissionGabe(elementId):
+    # given element ID of Transmission Loss folder
     files=ui.element(elementId)
     freq=None
+    receivers=[]
     for file in files.childs():
+        # search for file name STL Data 
         if file[2]=='STL Data':
             document=ui.e_file(file[0])
-            receivers=[]
             dataFile=ui.application.getdataarray(document)
-            for dataRow in dataFile:
-                if dataRow[0]=='':
-                    dataRow[0]=='Frequency'
-                    freq=dataRow
-                else:
-                    receivers.append(dataRow)
+            # split the frequency row from the receivers
+            freq=dataFile[0]
+            freq[0]='Frequency'
+            receivers=dataFile[1:]
     return receivers, freq
-                
+# create a matrix describing the location of the receviers in the grid            
 def createMatrix(xVals,yVals,recIds,first,last):
-    # recIds is an array of all the receiver IDs
-    recCounter=0
+    # get list of receivers in the array
+    firstIndex=recIds.index(first)
+    lastIndex=recIds.index(last)
+    receiverList=recIds[firstIndex:(lastIndex+1)]
     recMatrix=[]
-    startLogging=False
+    recCounter=0
+    # create the matrix based on the user input x y values
     for x in range(xVals):
         recVals=[]
         for y in range(yVals):
-            if recIds[recCounter]==first:
-                startLogging=True
-            if startLogging:
-                recVals.append(recIds[recCounter])
-            if recIds[recCounter]==last:
-                startLogging=False
+            recVals.append(receiverList[recCounter])
             recCounter+=1
         recMatrix.append(recVals)
     return recMatrix
-
+# search through the input data and if any values are NaN, make them equal to the lowest value in the array
 def removeNaN(receiver):
     lowestVal=500
     recId=receiver[0]
@@ -108,7 +110,7 @@ def removeNaN(receiver):
             receiver[k]=lowestVal
     receiver.insert(0,recId)
     return receiver
-
+# take the input matrix and the data to create the xyz plot
 def createXYZ(recMatrix,receivers,freq,selectedFreq):
     xyz=[['','X','Y','Z']]
     x=1
