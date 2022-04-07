@@ -172,14 +172,20 @@ class manager:
         folder=ui.e_file(elementId)
         uiTitle="Plot XYZ"
         receivers,freq=readTransmissionGabe(elementId)
+        freq.append("All Freq")
         recIds=getRecNames(receivers)
         userInput1=ui.application.getuserinput(uiTitle,"Please input the matrix dimensions", {"First Receiver":recIds,"Last Receiver":recIds,"X Dimension":"0","Y Dimension":"0","Frequency":freq[1:]})
         if userInput1[0]:
             MakeDir(elementId)
             recMatrix=createMatrix(int(userInput1[1]["X Dimension"]),int(userInput1[1]["Y Dimension"]),recIds,userInput1[1]["First Receiver"],userInput1[1]["Last Receiver"])
-            xyz=createXYZ(recMatrix,receivers,freq,userInput1[1]["Frequency"])
-            targetFreq=userInput1[1]["Frequency"]
-            SaveFile(zip(*xyz),folder.buildfullpath()+f"XYZ Plots\{targetFreq}_STL_XYZ.gabe")
+            if userInput1[1]["Frequency"] == "All Freq":
+                for f in freq[1:-1]:
+                    xyz=createXYZ(recMatrix,receivers,freq[:-1],f)
+                    SaveFile(zip(*xyz),folder.buildfullpath()+f"XYZ Plots\{f}_STL_XYZ.gabe")
+            else:
+                xyz=createXYZ(recMatrix,receivers,freq[:-1],userInput1[1]["Frequency"])
+                targetFreq=userInput1[1]["Frequency"]
+                SaveFile(zip(*xyz),folder.buildfullpath()+f"XYZ Plots\{targetFreq}_STL_XYZ.gabe")
             ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
             
     def contributionMatrix(self,elementId):
@@ -187,21 +193,29 @@ class manager:
         uiTitle="Plot XYZ"
         sourceNames=GetSourceNames(elementId)
         sources,freq=readContributionGabe(elementId)
+        freq.append("All Freq")
         recIds=getRecNames(sources[0])
         userInput1=ui.application.getuserinput(uiTitle,"Please input the matrix dimensions", {"First Receiver":recIds,"Last Receiver":recIds,"X Dimension":"0","Y Dimension":"0","Frequency":freq[1:]})
         if userInput1[0]:
             MakeDir(elementId)
             counter=0
+            recMatrix=createMatrix(int(userInput1[1]["X Dimension"]),int(userInput1[1]["Y Dimension"]),recIds,userInput1[1]["First Receiver"],userInput1[1]["Last Receiver"])
             for source in sources:
-                recMatrix=createMatrix(int(userInput1[1]["X Dimension"]),int(userInput1[1]["Y Dimension"]),recIds,userInput1[1]["First Receiver"],userInput1[1]["Last Receiver"])
-                xyz=createXYZ(recMatrix,source,freq,userInput1[1]["Frequency"])
-                targetFreq=userInput1[1]["Frequency"]
-                SaveFile(zip(*xyz),folder.buildfullpath()+f"XYZ Plots\{sourceNames[counter]}_{targetFreq}_XYZ.gabe")
+                if userInput1[1]["Frequency"] == "All Freq":
+                    for f in freq[1:-1]:
+                        xyz=createXYZ(recMatrix,source,freq[:-1],f)
+                        SaveFile(zip(*xyz),folder.buildfullpath()+f"XYZ Plots\{sourceNames[counter]}_{f}_XYZ.gabe")
+                else:
+                    xyz=createXYZ(recMatrix,source,freq[:-1],userInput1[1]["Frequency"])
+                    targetFreq=userInput1[1]["Frequency"]
+                    SaveFile(zip(*xyz),folder.buildfullpath()+f"XYZ Plots\{sourceNames[counter]}_{targetFreq}_XYZ.gabe")
                 counter+=1
             ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
+
     def receiverMatrix(self,elementId):
         folder=ui.e_file(elementId)
         receivers,freq,exists=readFusionGabe(elementId)
+        freq.append("All Freq")
         if not exists:
             print("Please Merge Recevier SPL")
         elif exists:
@@ -209,11 +223,16 @@ class manager:
             recIds=getRecNames(receivers)
             userInput1=ui.application.getuserinput(uiTitle,"Please input the matrix dimensions", {"First Receiver":recIds,"Last Receiver":recIds,"X Dimension":"0","Y Dimension":"0","Frequency":freq[1:]})
             if userInput1[0]:
-                recMatrix=createMatrix(int(userInput1[1]["X Dimension"]),int(userInput1[1]["Y Dimension"]),recIds,userInput1[1]["First Receiver"],userInput1[1]["Last Receiver"])
-                xyz=createXYZ(recMatrix,receivers,freq,userInput1[1]["Frequency"])
                 MakeDir(elementId)
-                targetFreq=userInput1[1]["Frequency"]
-                SaveFile(zip(*xyz),folder.buildfullpath()+f"XYZ Plots\{targetFreq}_XYZ.gabe")
+                recMatrix=createMatrix(int(userInput1[1]["X Dimension"]),int(userInput1[1]["Y Dimension"]),recIds,userInput1[1]["First Receiver"],userInput1[1]["Last Receiver"])
+                if userInput1[1]["Frequency"] == "All Freq":
+                    for f in freq[1:-1]:
+                        xyz=createXYZ(recMatrix,receivers,freq[:-1],f)
+                        SaveFile(zip(*xyz),folder.buildfullpath()+f"XYZ Plots\{f}_XYZ.gabe")
+                else:
+                    xyz=createXYZ(recMatrix,receivers,freq[:-1],userInput1[1]["Frequency"])
+                    targetFreq=userInput1[1]["Frequency"]
+                    SaveFile(zip(*xyz),folder.buildfullpath()+f"XYZ Plots\{targetFreq}_XYZ.gabe")
                 ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
 
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_REPORT_FOLDER, manager()) # alter here based on menu location
