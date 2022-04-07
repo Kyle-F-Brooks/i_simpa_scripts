@@ -16,8 +16,8 @@ Each folder contains the required files to run the tools within I-Simpa 1.3.4 wi
 **Administrator controls are required to install any of these tools**
 
 1. Download the desired tools by pressing the "Code" button at the top of the screen and then "Download ZIP"
-2. Open the I-Simpa folder usually located at C:\Program Files\I-SIMPA\UserScript
-3. Paste the tool folder into the user script folder **Note:** recp_res_tool goes into the ..\I-SIMPA\SystemScript folder and replaces the one already contained within.
+2. Open the I-Simpa folder usually located at C:\Program Files\I-SIMPA\
+3. Paste the UserScript, SystemScript and libsimpa folders that were downloaded into C:\Program Files\I-SIMPA\ and choose to replace any other versions
 4. Reboot any open instances of I-Simpa 
 
 ## libsimpa
