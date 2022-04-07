@@ -20,7 +20,7 @@ def do_convert_all(elementId):
             document = ui.e_file(el[0])
             gridparam=ui.application.getdataarray(document)
             path = document.buildfullpath().replace(".gabe",".csv")
-            with open(path.encode('cp1252'), 'w') as csvfile:
+            with open(path.encode('cp1252'), 'w', newline='') as csvfile:
                 writer = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
                 for row in gridparam:
                     writer.writerow(row)
@@ -31,7 +31,6 @@ class manager:
     def getmenu(self,elementType,elementId,menu):
         # create and link the menu button with its function
         el=ui.element(elementId)
-        infos=el.getinfos()
         menu.insert(0,())
         menu.insert(0,(u"Convert all files in sub-directories to CSV",self.OnConvertAllid))
         return True
