@@ -172,7 +172,7 @@ class manager:
         folder=ui.e_file(elementId)
         uiTitle="Plot XYZ"
         receivers,freq=readTransmissionGabe(elementId)
-        freq.insert(0, "All Freq")
+        freq.insert(1, "All Freq")
         recIds=getRecNames(receivers)
         userInput1=ui.application.getuserinput(uiTitle,"Please input the matrix dimensions", {"First Receiver":recIds,"Last Receiver":recIds,"X Dimension":"0","Y Dimension":"0","Frequency":freq[1:]})
         if userInput1[0]:
@@ -193,7 +193,7 @@ class manager:
         uiTitle="Plot XYZ"
         sourceNames=GetSourceNames(elementId)
         sources,freq=readContributionGabe(elementId)
-        freq.insert(0, "All Freq")
+        freq.insert(1, "All Freq")
         recIds=getRecNames(sources[0])
         userInput1=ui.application.getuserinput(uiTitle,"Please input the matrix dimensions", {"First Receiver":recIds,"Last Receiver":recIds,"X Dimension":"0","Y Dimension":"0","Frequency":freq[1:]})
         if userInput1[0]:
@@ -215,7 +215,7 @@ class manager:
     def receiverMatrix(self,elementId):
         folder=ui.e_file(elementId)
         receivers,freq,exists=readFusionGabe(elementId)
-        freq.insert(0, "All Freq")
+        freq.insert(1, "All Freq")
         if not exists:
             print("Please Merge Recevier SPL")
         elif exists:
