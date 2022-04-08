@@ -176,14 +176,15 @@ class manager:
         recIds=getRecNames(receivers)
         userInput1=ui.application.getuserinput(uiTitle,"Please input the matrix dimensions", {"First Receiver":recIds,"Last Receiver":recIds,"X Dimension":"0","Y Dimension":"0","Frequency":freq[1:]})
         if userInput1[0]:
+            freq.pop(1)
             MakeDir(elementId)
             recMatrix=createMatrix(int(userInput1[1]["X Dimension"]),int(userInput1[1]["Y Dimension"]),recIds,userInput1[1]["First Receiver"],userInput1[1]["Last Receiver"])
             if userInput1[1]["Frequency"] == "All Freq":
-                for f in freq[1:-1]:
-                    xyz=createXYZ(recMatrix,receivers,freq[:-1],f)
+                for f in freq[1:]:
+                    xyz=createXYZ(recMatrix,receivers,freq,f)
                     SaveFile(zip(*xyz),folder.buildfullpath()+f"XYZ Plots\{f}_STL_XYZ.gabe")
             else:
-                xyz=createXYZ(recMatrix,receivers,freq[:-1],userInput1[1]["Frequency"])
+                xyz=createXYZ(recMatrix,receivers,freq,userInput1[1]["Frequency"])
                 targetFreq=userInput1[1]["Frequency"]
                 SaveFile(zip(*xyz),folder.buildfullpath()+f"XYZ Plots\{targetFreq}_STL_XYZ.gabe")
             ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
@@ -198,16 +199,17 @@ class manager:
         recIds=getRecNames(sources[0])
         userInput1=ui.application.getuserinput(uiTitle,"Please input the matrix dimensions", {"First Receiver":recIds,"Last Receiver":recIds,"X Dimension":"0","Y Dimension":"0","Frequency":freq[1:]})
         if userInput1[0]:
+            freq.pop(1)
             MakeDir(elementId)
             counter=0
             recMatrix=createMatrix(int(userInput1[1]["X Dimension"]),int(userInput1[1]["Y Dimension"]),recIds,userInput1[1]["First Receiver"],userInput1[1]["Last Receiver"])
             for source in sources:
                 if userInput1[1]["Frequency"] == "All Freq":
-                    for f in freq[1:-1]:
-                        xyz=createXYZ(recMatrix,source,freq[:-1],f)
+                    for f in freq[1:]:
+                        xyz=createXYZ(recMatrix,source,freq,f)
                         SaveFile(zip(*xyz),folder.buildfullpath()+f"XYZ Plots\{sourceNames[counter]}_{f}_XYZ.gabe")
                 else:
-                    xyz=createXYZ(recMatrix,source,freq[:-1],userInput1[1]["Frequency"])
+                    xyz=createXYZ(recMatrix,source,freq,userInput1[1]["Frequency"])
                     targetFreq=userInput1[1]["Frequency"]
                     SaveFile(zip(*xyz),folder.buildfullpath()+f"XYZ Plots\{sourceNames[counter]}_{targetFreq}_XYZ.gabe")
                 counter+=1
@@ -225,14 +227,15 @@ class manager:
             recIds=getRecNames(receivers)
             userInput1=ui.application.getuserinput(uiTitle,"Please input the matrix dimensions", {"First Receiver":recIds,"Last Receiver":recIds,"X Dimension":"0","Y Dimension":"0","Frequency":freq[1:]})
             if userInput1[0]:
+                freq.pop(1)
                 MakeDir(elementId)
                 recMatrix=createMatrix(int(userInput1[1]["X Dimension"]),int(userInput1[1]["Y Dimension"]),recIds,userInput1[1]["First Receiver"],userInput1[1]["Last Receiver"])
                 if userInput1[1]["Frequency"] == "All Freq":
-                    for f in freq[1:-1]:
-                        xyz=createXYZ(recMatrix,receivers,freq[:-1],f)
+                    for f in freq[1:]:
+                        xyz=createXYZ(recMatrix,receivers,freq,f)
                         SaveFile(zip(*xyz),folder.buildfullpath()+f"XYZ Plots\{f}_XYZ.gabe")
                 else:
-                    xyz=createXYZ(recMatrix,receivers,freq[:-1],userInput1[1]["Frequency"])
+                    xyz=createXYZ(recMatrix,receivers,freq,userInput1[1]["Frequency"])
                     targetFreq=userInput1[1]["Frequency"]
                     SaveFile(zip(*xyz),folder.buildfullpath()+f"XYZ Plots\{targetFreq}_XYZ.gabe")
                 ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
