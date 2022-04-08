@@ -39,14 +39,11 @@ Combines each value of a chosen measurement into a single file to allow for easi
 ## absorption_calc
 Calculates the Absorption Coefficient and the Sabine absorption, uses the early decay time(EDT)
 
-## plot_xyz
-Used to convert a grid of microphone data into a readable format for plotting libraries such as d-plot
-
 ## source_contributions
 Used to get the specific source contribution for each microphone and output a file for each source with the spl reading at each receiver
 
 ## plot_xyz
-Used to convert a grid of microphone data into a readable format for plotting libraries such as d-plot, can read the output of the source contributions
+Used to convert a grid of microphone data into a readable format for plotting libraries such as d-plot, can read the output of the source contributions and Transmission Loss
 
 ## stl_calc
 Calculates the Transmission loss, based on having an excitation receiver.
