@@ -187,6 +187,7 @@ class manager:
                 targetFreq=userInput1[1]["Frequency"]
                 SaveFile(zip(*xyz),folder.buildfullpath()+f"XYZ Plots\{targetFreq}_STL_XYZ.gabe")
             ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
+            ui.application.saveproject()
             
     def contributionMatrix(self,elementId):
         folder=ui.e_file(elementId)
@@ -211,6 +212,7 @@ class manager:
                     SaveFile(zip(*xyz),folder.buildfullpath()+f"XYZ Plots\{sourceNames[counter]}_{targetFreq}_XYZ.gabe")
                 counter+=1
             ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
+            ui.application.saveproject()
 
     def receiverMatrix(self,elementId):
         folder=ui.e_file(elementId)
@@ -234,5 +236,6 @@ class manager:
                     targetFreq=userInput1[1]["Frequency"]
                     SaveFile(zip(*xyz),folder.buildfullpath()+f"XYZ Plots\{targetFreq}_XYZ.gabe")
                 ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
+                ui.application.saveproject()
 
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_REPORT_FOLDER, manager()) # alter here based on menu location
