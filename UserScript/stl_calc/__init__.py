@@ -102,6 +102,20 @@ def calcAvgSTL(srcrecInput, recsInput, qffInput, lfInput): # srcrec-source recei
     save=[freq,stl]
     return save
 
+def removeNaN(receivers):
+    nanCount=0
+    newRecs = []
+    for receiver in receivers:
+        recId=receiver[0]
+        receiver=receiver[1:]
+        for k,v in enumerate(receiver):
+            if 'inf' in str(v):
+                receiver[k]=50
+                nanCount+=1
+        receiver.insert(0,recId)
+        newRecs.append(receiver)
+    return newRecs, nanCount
+
 def SaveFile(saveData,path):
     data=list(saveData)
     # Gabe_rw(), stringarray(), floatarray() called from libsimpa
@@ -147,6 +161,10 @@ class manager:
             if not exists:
                 print("Please Merge Punctual Receivers SPL")
             elif exists:
+                receivers,nanCount = removeNaN(receivers) 
+                print(nanCount)
+                if nanCount > 10:
+                    print("High Trasmission Loss Detected!\n")
                 freqRange={"a. 100 Hz":"0","b. 125 Hz":"0","c. 160 Hz":"0","d. 200 Hz": "0", "e. 250 Hz": "0", "f. 315 Hz":"0", "g. 400 Hz":"0","h. 500 Hz":"0","i. 630 Hz":"0","j. 800 Hz":"0","k. 1000 Hz":"0","l. 1250 Hz":"0","m. 1600 Hz":"0","n. 2000 Hz":"0","o. 2500 Hz":"0","p. 3150 Hz":"0","q. 4000 Hz":"0","r. 5000 Hz":"0","s. 6300 Hz":"0","t. 8000 Hz":"0","u. 10000 Hz":"0"}
                 userInput2=ui.application.getuserinput(uiTitle,(u"Please Input the QFF data"),freqRange)
                 if userInput2[0]:
