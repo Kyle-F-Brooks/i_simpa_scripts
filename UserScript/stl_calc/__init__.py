@@ -156,25 +156,27 @@ class manager:
         grp=ui.e_file(elementId)
         userInput1=ui.application.getuserinput(uiTitle,(u"Pick the Excitation Receiver from the list"),{"Excitation Receiver": names})
         if userInput1[0]:
-            recid=userInput1[1]["Excitation Receiver"]
-            srcrec,receivers,exists=getVals(elementId, recid)
-            if not exists:
-                print("Please Merge Punctual Receivers SPL")
-            elif exists:
-                receivers,nanCount = removeNaN(receivers) 
-                print(nanCount)
-                if nanCount > 10:
-                    print("High Trasmission Loss Detected!\n")
-                freqRange={"a. 100 Hz":"0","b. 125 Hz":"0","c. 160 Hz":"0","d. 200 Hz": "0", "e. 250 Hz": "0", "f. 315 Hz":"0", "g. 400 Hz":"0","h. 500 Hz":"0","i. 630 Hz":"0","j. 800 Hz":"0","k. 1000 Hz":"0","l. 1250 Hz":"0","m. 1600 Hz":"0","n. 2000 Hz":"0","o. 2500 Hz":"0","p. 3150 Hz":"0","q. 4000 Hz":"0","r. 5000 Hz":"0","s. 6300 Hz":"0","t. 8000 Hz":"0","u. 10000 Hz":"0"}
-                userInput2=ui.application.getuserinput(uiTitle,(u"Please Input the QFF data"),freqRange)
-                if userInput2[0]:
-                    userInput3=ui.application.getuserinput(uiTitle,(u"Please Input Low Frequency Correction"),freqRange)
-                    if userInput3[0]:
-                        saveAvgData=calcAvgSTL(srcrec, receivers, userInput2[1], userInput3[1])
-                        saveData=calcSTL(srcrec,receivers,userInput2[1],userInput3[1])
-                        MakeDir(elementId)
-                        SaveFile(zip(*saveData),grp.buildfullpath()+r"Transmission Loss\STL Data.gabe")
-                        SaveFile(zip(*saveAvgData),grp.buildfullpath()+r"Transmission Loss\Average STL Data.gabe")
-                        ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
-
+            try:
+                recid=userInput1[1]["Excitation Receiver"]
+                srcrec,receivers,exists=getVals(elementId, recid)
+                if not exists:
+                    print("Please Merge Punctual Receivers SPL")
+                elif exists:
+                    receivers,nanCount = removeNaN(receivers) 
+                    print(nanCount)
+                    if nanCount > 10:
+                        print("High Trasmission Loss Detected!\n")
+                    freqRange={"a. 100 Hz":"0","b. 125 Hz":"0","c. 160 Hz":"0","d. 200 Hz": "0", "e. 250 Hz": "0", "f. 315 Hz":"0", "g. 400 Hz":"0","h. 500 Hz":"0","i. 630 Hz":"0","j. 800 Hz":"0","k. 1000 Hz":"0","l. 1250 Hz":"0","m. 1600 Hz":"0","n. 2000 Hz":"0","o. 2500 Hz":"0","p. 3150 Hz":"0","q. 4000 Hz":"0","r. 5000 Hz":"0","s. 6300 Hz":"0","t. 8000 Hz":"0","u. 10000 Hz":"0"}
+                    userInput2=ui.application.getuserinput(uiTitle,(u"Please Input the QFF data"),freqRange)
+                    if userInput2[0]:
+                        userInput3=ui.application.getuserinput(uiTitle,(u"Please Input Low Frequency Correction"),freqRange)
+                        if userInput3[0]:
+                            saveAvgData=calcAvgSTL(srcrec, receivers, userInput2[1], userInput3[1])
+                            saveData=calcSTL(srcrec,receivers,userInput2[1],userInput3[1])
+                            MakeDir(elementId)
+                            SaveFile(zip(*saveData),grp.buildfullpath()+r"Transmission Loss\STL Data.gabe")
+                            SaveFile(zip(*saveAvgData),grp.buildfullpath()+r"Transmission Loss\Average STL Data.gabe")
+                            ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
+            except:
+                print("An Error Occured calculating the transmission loss")
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_REPORT_FOLDER, manager()) # alter here based on menu location

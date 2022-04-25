@@ -86,8 +86,10 @@ class manager:
         else:
             return False
     def getSrcCont(self, elementId):
-        MakeDir(elementId)
-        RunSaves(elementId)
-        ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
-
+        try:
+            MakeDir(elementId)
+            RunSaves(elementId)
+            ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
+        except:
+            print("An Error occured extracting the source contributions")
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_REPORT_FOLDER, manager()) # alter here based on menu location
