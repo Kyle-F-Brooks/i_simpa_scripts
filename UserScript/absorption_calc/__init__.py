@@ -106,8 +106,8 @@ class manager:
                 if userInput2[0]:
                     if userInput2[1]["Data Type"] == "Bare":
                         try:
-                            sampleData=calcSabineAbs(int(areaData["Cabin Volume"]),avgSPL)
-                            absPercent=calcPercentageAbs(int(areaData["Cabin Area"]),sampleData)
+                            sampleData=calcSabineAbs(float(areaData["Cabin Volume"]),avgSPL)
+                            absPercent=calcPercentageAbs(float(areaData["Cabin Area"]),sampleData)
                             sampleData.insert(0,"Sabine")
                             absPercent.insert(0,"Absorption %")
                             saveData=[freq,sampleData,absPercent]
@@ -120,8 +120,8 @@ class manager:
                             userInput3=ui.application.getuserinput(uiTitle, "Input Bare Sabine Data", freqRange)
                             if userInput3[0]:
                                 bareData=list(userInput3[1].values())
-                                sampleData=calcSabineAbs(int(areaData["Cabin Volume"]),avgSPL)
-                                absCoeff=calcAbsCoeff(bareData,sampleData,int(areaData["Sample Area"]))
+                                sampleData=calcSabineAbs(float(areaData["Cabin Volume"]),avgSPL)
+                                absCoeff=calcAbsCoeff(bareData,sampleData,float(areaData["Sample Area"]))
                                 sabineAbs=calcSabineFinal(sampleData,bareData)
                                 absCoeff.insert(0,"Absorption Coefficient")
                                 sabineAbs.insert(0,"Sabine")
