@@ -22,3 +22,30 @@ def MakeDir(elementId, targetDir):
     targetPath = currentPath.buildfullpath()+ targetDir
     if not os.path.exists(targetPath):
         os.mkdir(targetPath)
+
+def GetCorrection(sppsElementId,solveElementId):
+    qff=[]
+    lf=[]
+    sppsFolder=ui.element(sppsElementId)
+    for files in sppsFolder.childs():
+        if files[1]==ui.element_type.ELEMENT_TYPE_REPORT_GABE:
+            lfDocument=ui.e_file(files[0])
+            if lfDocument.getinfos()["name"]=="LF_Correction":
+                gridparam=ui.application.getdataarray(lfDocument)
+                for row in gridparam:
+                    if row[0]=='':
+                        pass
+                    else:
+                        lf.append(row[1])
+    solveFolder=ui.element(solveElementId)
+    for files in solveFolder.childs():
+        if files[1]==ui.element_type.ELEMENT_TYPE_REPORT_GABE:
+            qffDocument=ui.e_file(files[0])
+            if qffDocument.getinfos()["name"]=="QFF_Correction":
+                gridparam=ui.application.getdataarray(qffDocument)
+                for row in gridparam:
+                    if row[0]=='':
+                        pass
+                    else:
+                        qff.append(row[1])
+    return qff,lf
