@@ -52,7 +52,7 @@ class manager:
             freq=('','100 Hz','125 Hz','160 Hz','200 Hz','250 Hz','315 Hz','400 Hz','500 Hz','630 Hz','800 Hz','1000 Hz','1250 Hz','1600 Hz','2000 Hz','2500 Hz','3150 Hz','4000 Hz','5000 Hz','6300 Hz','8000 Hz','10000 Hz')
             lf=list(userInput1[1].values())
             lf.insert(0,'LF')
-            saveData=[freq, list(userInput1[1].values())]
+            saveData=[freq, lf]
             path=currentPath.buildfullpath()+"LF_Correction.gabe"
             SaveFile(saveData, path)
             ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
