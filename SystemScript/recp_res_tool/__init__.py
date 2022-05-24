@@ -87,50 +87,77 @@ class manager:
             os.mkdir(pat)
     # button commands, create file name and prints process to the pyhton console
     def OnSPL(self,idel):
-        self.MakeDir(idel)
-        grp=ui.e_file(idel)
-        do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionSPL.gabe", "Sound level (dB)")
-        print("Created file fusionSPL.gabe")
+        try:
+            self.MakeDir(idel)
+            grp=ui.e_file(idel)
+            do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionSPL.gabe", "Sound level (dB)")
+            print("Created file fusionSPL.gabe")
+        except:
+            print("An Error Occured with SPL")
     def OnSPLA(self,idel):
-        self.MakeDir(idel)
-        grp=ui.e_file(idel)
-        do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionSPLA.gabe", "Sound level (dBA)")
-        print("Created file fusionSPLA.gabe")
+        try:
+            self.MakeDir(idel)
+            grp=ui.e_file(idel)
+            do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionSPLA.gabe", "Sound level (dBA)")
+            print("Created file fusionSPLA.gabe")
+        except:
+            print("An Error Occured with SPLA")
     def OnC50(self,idel):
-        self.MakeDir(idel)
-        grp=ui.e_file(idel)
-        do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionC50.gabe", "C-50 (dB)")
-        print("Created file fusionC50.gabe")
+        try:
+            self.MakeDir(idel)
+            grp=ui.e_file(idel)
+            do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionC50.gabe", "C-50 (dB)")
+            print("Created file fusionC50.gabe")
+        except:
+            print("An Error Occured with C50")
     def OnC80(self,idel):
-        self.MakeDir(idel)
-        grp=ui.e_file(idel)
-        do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionC80.gabe", "C-80 (dB)")
-        print("Created file fusionC80.gabe")
+        try:
+            self.MakeDir(idel)
+            grp=ui.e_file(idel)
+            do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionC80.gabe", "C-80 (dB)")
+            print("Created file fusionC80.gabe")
+        except:
+            print("An Error Occured with C80")
     def OnTS(self,idel):
-        self.MakeDir(idel)
-        grp=ui.e_file(idel)
-        do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionTs.gabe", "Ts (ms)")
-        print("Created file fusionTs.gabe")
+        try:
+            self.MakeDir(idel)
+            grp=ui.e_file(idel)
+            do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionTs.gabe", "Ts (ms)")
+            print("Created file fusionTs.gabe")
+        except:
+            print("An Error Occured with TS")
     def OnRT15(self,idel):
-        self.MakeDir(idel)
-        grp=ui.e_file(idel)
-        do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionRT15.gabe", "RT-15 (s)")
-        print("Created file fusionRT15.gabe")
+        try:
+            self.MakeDir(idel)
+            grp=ui.e_file(idel)
+            do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionRT15.gabe", "RT-15 (s)")
+            print("Created file fusionRT15.gabe")
+        except:
+            print("An Error Occured with RT15")
     def OnRT30(self,idel):
-        self.MakeDir(idel)
-        grp=ui.e_file(idel)
-        do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionRT30.gabe", "RT-30 (s)")
-        print("Created file fusionRT30.gabe")
+        try:
+            self.MakeDir(idel)
+            grp=ui.e_file(idel)
+            do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionRT30.gabe", "RT-30 (s)")
+            print("Created file fusionRT30.gabe")
+        except:
+            print("An Error Occured with RT30")
     def OnEDT(self,idel):
-        self.MakeDir(idel)
-        grp=ui.e_file(idel)
-        do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionEDT.gabe", "EDT (s)")
-        print("Created file fusionEDT.gabe")
+        try:
+            self.MakeDir(idel)
+            grp=ui.e_file(idel)
+            do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionEDT.gabe", "EDT (s)")
+            print("Created file fusionEDT.gabe")
+        except:
+            print("An Error Occured with EDT")
     def OnST(self,idel):
-        self.MakeDir(idel)
-        grp=ui.e_file(idel)
-        do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionST.gabe", "ST (dB)")
-        print("Created file fusionST.gabe")
+        try:
+            self.MakeDir(idel)
+            grp=ui.e_file(idel)
+            do_fusion(idel,grp.buildfullpath()+ r"Fused Receivers\fusionST.gabe", "ST (dB)")
+            print("Created file fusionST.gabe")
+        except:
+            print("An Error Occured with ST")
     def OnAll(self,idel):
         self.OnSPL(idel)
         self.OnSPLA(idel)

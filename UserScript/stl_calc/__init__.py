@@ -3,6 +3,7 @@
 
 import uictrl as ui
 from libsimpa import *
+from core_functions import *
 import os
 
 # this function works
@@ -46,11 +47,9 @@ def getVals(elementId, recid):
                                 receivers.append(row) # any row not handled by code above gets added to the receiever list
     return srcrec, receivers, exists
 
-def calcSTL(srcrecInput,recsInput,qffInput,lfInput):
+def calcSTL(srcrecInput,recsInput,qff,lf):
     freq=('','100 Hz','125 Hz','160 Hz','200 Hz','250 Hz','315 Hz','400 Hz','500 Hz','630 Hz','800 Hz','1000 Hz','1250 Hz','1600 Hz','2000 Hz','2500 Hz','3150 Hz','4000 Hz','5000 Hz','6300 Hz','8000 Hz','10000 Hz')
     saveData=[freq]
-    qff=list(qffInput.values())
-    lf=list(lfInput.values())
     srcrec=list(srcrecInput)
     # Create correction factor
     correction=[]
@@ -68,11 +67,9 @@ def calcSTL(srcrecInput,recsInput,qffInput,lfInput):
     return saveData
 
 # this function works
-def calcAvgSTL(srcrecInput, recsInput, qffInput, lfInput): # srcrec-source receiver, recs list of other receivers, qff-list of qff vals, lf - list of lf correction vals 
+def calcAvgSTL(srcrecInput, recsInput, qff, lf): # srcrec-source receiver, recs list of other receivers, qff-list of qff vals, lf - list of lf correction vals 
     stl=[] # =srcrec-6-avgSPL+correction
     # create average of all receivers bar src rec
-    qff=list(qffInput.values())
-    lf=list(lfInput.values())
     recs=[]
     srcrec=list(srcrecInput[1:])
     for rec in recsInput:
@@ -109,33 +106,12 @@ def removeNaN(receivers):
         recId=receiver[0]
         receiver=receiver[1:]
         for k,v in enumerate(receiver):
-            if 'inf' in str(v):
+            if 'inf' in str(v): 
                 receiver[k]=50
                 nanCount+=1
         receiver.insert(0,recId)
         newRecs.append(receiver)
     return newRecs, nanCount
-
-def SaveFile(saveData,path):
-    data=list(saveData)
-    # Gabe_rw(), stringarray(), floatarray() called from libsimpa
-    gabewriter=Gabe_rw(len(data)) # create writer with length equal to data array length
-    labelcol=stringarray()  # label col is assigned as an array of strings
-    for cell in data[0][1:]:
-        labelcol.append(cell.encode('cp1252'))
-    gabewriter.AppendStrCol(labelcol,'')
-    for col in data[1:]:
-        datacol=floatarray()
-        for cell in col[1:]:
-            datacol.append(float(cell))
-        gabewriter.AppendFloatCol(datacol,str(col[0]))
-    gabewriter.Save(path.encode('cp1252'))    
-
-def MakeDir(elementId):
-    currentPath=ui.e_file(elementId)
-    dirPath=currentPath.buildfullpath()+ r"\Transmission Loss"
-    if not os.path.exists(dirPath):
-        os.mkdir(dirPath)
 
 class manager:
     def __init__(self):
@@ -149,32 +125,88 @@ class manager:
             return True
         else:
             return False
-
     def stlCalculation(self,elementId):
         names=getNames(elementId) 
         uiTitle="STL Calculation"
         grp=ui.e_file(elementId)
         userInput1=ui.application.getuserinput(uiTitle,(u"Pick the Excitation Receiver from the list"),{"Excitation Receiver": names})
         if userInput1[0]:
-            recid=userInput1[1]["Excitation Receiver"]
-            srcrec,receivers,exists=getVals(elementId, recid)
-            if not exists:
-                print("Please Merge Punctual Receivers SPL")
-            elif exists:
-                receivers,nanCount = removeNaN(receivers) 
-                print(nanCount)
-                if nanCount > 10:
-                    print("High Trasmission Loss Detected!\n")
-                freqRange={"a. 100 Hz":"0","b. 125 Hz":"0","c. 160 Hz":"0","d. 200 Hz": "0", "e. 250 Hz": "0", "f. 315 Hz":"0", "g. 400 Hz":"0","h. 500 Hz":"0","i. 630 Hz":"0","j. 800 Hz":"0","k. 1000 Hz":"0","l. 1250 Hz":"0","m. 1600 Hz":"0","n. 2000 Hz":"0","o. 2500 Hz":"0","p. 3150 Hz":"0","q. 4000 Hz":"0","r. 5000 Hz":"0","s. 6300 Hz":"0","t. 8000 Hz":"0","u. 10000 Hz":"0"}
-                userInput2=ui.application.getuserinput(uiTitle,(u"Please Input the QFF data"),freqRange)
-                if userInput2[0]:
-                    userInput3=ui.application.getuserinput(uiTitle,(u"Please Input Low Frequency Correction"),freqRange)
-                    if userInput3[0]:
-                        saveAvgData=calcAvgSTL(srcrec, receivers, userInput2[1], userInput3[1])
-                        saveData=calcSTL(srcrec,receivers,userInput2[1],userInput3[1])
-                        MakeDir(elementId)
-                        SaveFile(zip(*saveData),grp.buildfullpath()+r"Transmission Loss\STL Data.gabe")
-                        SaveFile(zip(*saveAvgData),grp.buildfullpath()+r"Transmission Loss\Average STL Data.gabe")
-                        ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
-
+            try:
+                recid=userInput1[1]["Excitation Receiver"]
+                srcrec,receivers,exists=getVals(elementId, recid)
+                if not exists:
+                    print("Please Merge Punctual Receivers SPL")
+                elif exists:
+                    receivers,nanCount = removeNaN(receivers) 
+                    print("%s inf values detected" % nanCount)
+                    if nanCount > 10:
+                        print("High Trasmission Loss Detected!\n")
+                    userInput2=ui.application.getuserinput(uiTitle,"Use Correction Values?",{"QFF":["Yes","No"], "LF":["Yes","No"]})
+                    if userInput2[0]:
+                        el=ui.element(elementId)
+                        infos=el.getinfos()
+                        el2=ui.element(infos["parentid"])
+                        solveId=infos["parentid"]
+                        solvePath=ui.e_file(solveId)
+                        infos2=el2.getinfos()
+                        sppsId=infos2["parentid"]
+                        sppsPath = ui.e_file(sppsId)
+                        if userInput2[1]["QFF"]=="Yes" and userInput2[1]["LF"]=="Yes":
+                            lfExists=os.path.exists(sppsPath.buildfullpath()+"LF_Correction.gabe")
+                            qffExists=os.path.exists(solvePath.buildfullpath()+"QFF_Correction.gabe")
+                            if lfExists and qffExists:
+                                qff,lf=GetBothCorrection(sppsId,solveId)
+                                saveAvgData=calcAvgSTL(srcrec,receivers,qff,lf)
+                                saveData=calcSTL(srcrec, receivers,qff,lf)
+                                targetDir= r"\Transmission Loss"
+                                MakeDir(elementId, targetDir)
+                                SaveFile(zip(*saveData),grp.buildfullpath()+r"Transmission Loss\STL Data.gabe")
+                                SaveFile(zip(*saveAvgData),grp.buildfullpath()+r"Transmission Loss\Average STL Data.gabe")
+                                ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
+                            elif lfExists and not qffExists:
+                                print("Please create LF correcton file")
+                            elif qffExists and not lfExists:
+                                print("Please create LF correcton file")
+                            else:
+                                print("Please create both LF and QFF correction files")
+                        elif userInput2[1]["QFF"]=="Yes" and userInput2[1]["LF"]=="No":
+                            qffExists=os.path.exists(solvePath.buildfullpath()+"QFF_Correction.gabe")
+                            if qffExists:
+                                lf=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+                                qff=GetQFFCorrection(solveId)
+                                saveAvgData=calcAvgSTL(srcrec,receivers,qff,lf)
+                                saveData=calcSTL(srcrec, receivers,qff,lf)
+                                targetDir= r"\Transmission Loss"
+                                MakeDir(elementId, targetDir)
+                                SaveFile(zip(*saveData),grp.buildfullpath()+r"Transmission Loss\STL Data.gabe")
+                                SaveFile(zip(*saveAvgData),grp.buildfullpath()+r"Transmission Loss\Average STL Data.gabe")
+                                ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
+                            else:
+                                print("Please create QFF correction file")
+                        elif userInput2[1]["QFF"]=="No" and userInput2[1]["LF"]=="Yes":
+                            lfExists=os.path.exists(sppsPath.buildfullpath()+"LF_Correction.gabe")
+                            if lfExists:
+                                qff=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+                                lf=GetLFCorrection(sppsId)
+                                saveAvgData=calcAvgSTL(srcrec,receivers,qff,lf)
+                                saveData=calcSTL(srcrec, receivers,qff,lf)
+                                targetDir= r"\Transmission Loss"
+                                MakeDir(elementId, targetDir)
+                                SaveFile(zip(*saveData),grp.buildfullpath()+r"Transmission Loss\STL Data.gabe")
+                                SaveFile(zip(*saveAvgData),grp.buildfullpath()+r"Transmission Loss\Average STL Data.gabe")
+                                ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
+                            else:
+                                print("Please create LF correction file")
+                        else:
+                            qff=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+                            lf=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+                            saveAvgData=calcAvgSTL(srcrec,receivers,qff,lf)
+                            saveData=calcSTL(srcrec, receivers,qff,lf)
+                            targetDir= r"\Transmission Loss"
+                            MakeDir(elementId, targetDir)
+                            SaveFile(zip(*saveData),grp.buildfullpath()+r"Transmission Loss\STL Data.gabe")
+                            SaveFile(zip(*saveAvgData),grp.buildfullpath()+r"Transmission Loss\Average STL Data.gabe")
+                            ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
+            except:
+                print("An Error Occured calculating the transmission loss")
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_REPORT_FOLDER, manager()) # alter here based on menu location
