@@ -48,8 +48,17 @@ Used to convert a grid of microphone data into a readable format for plotting li
 ## stl_calc
 Calculates the Transmission loss, based on having an excitation receiver.
 
+## var_input
+Takes the QFF and LF as inputs, saving them as gabe files. Makes the files accessible for stl_calc.
+
 ## material_link (WIP)
 this function is currently not imported into I-simpa. It has an issue regarding the source code.
+
+## power_balance (WIP)
+calculates the power balance based on the area, the projected area and the source power.
+
+## core_functions (WIP)
+a collection of functions that are used repeatedly by other scrzipts.
 
 ### Possible Features
 * STL Hologram
