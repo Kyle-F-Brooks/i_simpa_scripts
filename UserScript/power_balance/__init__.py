@@ -66,25 +66,43 @@ def calcPowerBalance(excitationSPL, areas, projArea, materials, lf, qff):
         overallTLLF.append(lf[k]+v)
     return overallTransmissionLoss, overallTLLF, projIntensity, totalPowerdB, totalPowerW
 
-def getMaterials(matsId):
-    materials=[]
-    return materials
+def getIds(sceneId):
+    matId=0 # needs both user and standard material data
+    surfacesId=0
 
 def getAreas(surfacesId):
     areas=[]
-    return areas
+    usedMats=[]
+    # ui.element(x).getdecimalconfig("aire")
+    # ui.element(x).getintegerconfig("idmat")
+    return areas, usedMats
+
+def getMaterials(matsId): # get the list of all materials related to the project
+    # have an input of material name list from the surfaces data
+    materials=[]
+    return materials
 
 class manager:
     def __init__(self):
         self.calcPowerBalanceId=ui.application.register_event(self.runCalculation)
+        self.getSceneId=ui.application.register_event(self.getScene)
     def getmenu(self,elementType,elementId,menu):
+        # create the menu items
         el=ui.element(elementId)
         infos=el.getinfos()
         if infos["name"]=="Transmission Loss":
             menu.insert(2,("Create Power Balance",self.calcPowerBalanceId))
             return True
+        if infos["name"]=="Data" or infos["name"]=="Project":
+            menu.insert(4,("Get Scene ID", self.getSceneId))
+            menu.insert(4,())
+            return True
         else:
             return False
+    def getScene(self,elementId):
+        # display the scene tab Id to allow it to be input to find the surface and material database
+        sceneId=ui.element(elementId).getinfos()["parentid"]
+        print("Scene ID: %s" % sceneId)
     def runCalculation(self,elementId):
         el=ui.element(elementId)
         infos=el.getinfos()
@@ -93,7 +111,7 @@ class manager:
         sppsId=ui.element(solveId).getinfos()["parentid"]
         uiTitle="Power Balance Calculator"
         names=getNames(punctualId)
-        userInput1=ui.application.getuserinput(uiTitle, "Pick the excitation Receiver", {"Excitation": names})
+        userInput1=ui.application.getuserinput(uiTitle, "Pick the excitation Receiver", {"Excitation": names, "Scene ID": 0})
         if userInput1[0]:
             excRecName=userInput1[1]["Excitation"]
             excitationSPL=[]
@@ -105,3 +123,5 @@ class manager:
 
 
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_REPORT_FOLDER, manager()) # alter here based on menu location
+ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_DONNEES,manager())
+ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_PROJET,manager())
