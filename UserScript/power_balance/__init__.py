@@ -70,17 +70,36 @@ def getIds(sceneId):
     matId=0 # needs both user and standard material data
     surfacesId=0
 
+    for treeItem in ui.element(sceneId).childs():
+        # Surface
+        if treeItem[1]==ui.element_type.ELEMENT_TYPE_SCENE_DONNEES:
+            pass
+        elif treeItem[1]==ui.element_type.ELEMENT_TYPE_SCENE_PROJET:
+            pass
+        else:
+            print("Incorrect Scene ID")
+
 def getAreas(surfacesId):
+    # need to copy the element in the tree, creates the value for aire
+    # each boot up needs a fresh element copy
     areas=[]
-    usedMats=[]
-    # ui.element(x).getdecimalconfig("aire")
-    # ui.element(x).getintegerconfig("idmat")
-    return areas, usedMats
+    surfaceNames=[]
+    for surface in ui.element(surfacesId).childs():
+        if surface[1] == ui.element_type.ELEMENT_TYPE_SCENE_GROUP_SURFACES_GROUPE:
+            area=ui.element(surface[0].getdecimalconfig("aire"))
+            surfaceNames.append(surface[2])
+            areas.append(area)
+    return areas, surfaceNames
 
 def getMaterials(matsId): # get the list of all materials related to the project
-    # have an input of material name list from the surfaces data
-    materials=[]
-    return materials
+    # chose material from database for each surface
+    # if element type is ELEMENT_TYPE_SCENE_BDD_MATERIAUX_APP, ELEMENT_TYPE_SCENE_BDD_MATERIAUX_USER
+    for materials in (ui.element(matsId).childs()):
+        if materials[1] == ui.element_type.ELEMENT_TYPE_SCENE_BDD_MATERIAUX_APP:
+            pass
+        elif materials[1] == ui.element_type.ELEMENT_TYPE_SCENE_BDD_MATERIAUX_USER:
+            pass
+    return 0
 
 class manager:
     def __init__(self):
@@ -116,7 +135,7 @@ class manager:
             excRecName=userInput1[1]["Excitation"]
             excitationSPL=[]
             qff,lf=GetBothCorrection(sppsId,solveId)
-            areas=getAreas() # areas format [[][][][]]
+            areas,surfaceNames=getAreas() # areas format [[][][][]]
             projArea=0 # have projected area be input by the user
             materials=getMaterials() # materials format [[][][][][][]]
             overallTransmissionLoss, overallTLLF, projIntensity, totalPowerdB, totalPowerW=calcPowerBalance(excitationSPL,areas,projArea,materials,lf,qff)
