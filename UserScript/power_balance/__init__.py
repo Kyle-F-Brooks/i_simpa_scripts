@@ -69,15 +69,23 @@ def calcPowerBalance(excitationSPL, areas, projArea, materials, lf, qff):
 def getIds(sceneId):
     matId=0 # needs both user and standard material data
     surfacesId=0
-
     for treeItem in ui.element(sceneId).childs():
         # Surface
         if treeItem[1]==ui.element_type.ELEMENT_TYPE_SCENE_DONNEES:
-            pass
+            for data in ui.element(treeItem[0]).childs():
+                if data[1]==ui.element_type.ELEMENT_TYPE_SCENE_GROUPESURFACES:
+                    surfacesId=data[0]
+        # Materials
         elif treeItem[1]==ui.element_type.ELEMENT_TYPE_SCENE_PROJET:
-            pass
+            for project in ui.element(treeItem[0]).childs():
+                if project[1]==ui.element_type.ELEMENT_TYPE_SCENE_BDD:
+                    for database in ui.element(project[0]).childs():
+                        if database[1]==ui.element_type.ELEMENT_TYPE_SCENE_BDD_MATERIAUX:
+                            for data in ui.element(database[0]).childs():
+                                matId=data[0]
         else:
             print("Incorrect Scene ID")
+    return matId, surfacesId
 
 def getAreas(surfacesId):
     # need to copy the element in the tree, creates the value for aire
@@ -132,12 +140,13 @@ class manager:
         names=getNames(punctualId)
         userInput1=ui.application.getuserinput(uiTitle, "Pick the excitation Receiver", {"Excitation": names, "Scene ID": 0})
         if userInput1[0]:
+            matId, surfacesId = getIds(userInput1[1]["Scene ID"])
             excRecName=userInput1[1]["Excitation"]
             excitationSPL=[]
             qff,lf=GetBothCorrection(sppsId,solveId)
-            areas,surfaceNames=getAreas() # areas format [[][][][]]
+            areas,surfaceNames=getAreas(surfacesId) # areas format [[][][][]]
             projArea=0 # have projected area be input by the user
-            materials=getMaterials() # materials format [[][][][][][]]
+            materials=getMaterials(matId) # materials format [[][][][][][]]
             overallTransmissionLoss, overallTLLF, projIntensity, totalPowerdB, totalPowerW=calcPowerBalance(excitationSPL,areas,projArea,materials,lf,qff)
 
 
