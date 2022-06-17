@@ -26,7 +26,7 @@ class manager:
 # ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_GROUPESURFACES,manager())
 # ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_RECEPTEURSP,manager())
 # ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_BDD_MATERIAUX, manager())
-ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_DONNES,manager())
+ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_DONNEES,manager())
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_PROJET,manager())
 # ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE,manager())
 # ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE,manager())
