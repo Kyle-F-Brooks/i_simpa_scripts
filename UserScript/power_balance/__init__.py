@@ -81,8 +81,7 @@ def getIds(sceneId):
                 if project[1]==ui.element_type.ELEMENT_TYPE_SCENE_BDD:
                     for database in ui.element(project[0]).childs():
                         if database[1]==ui.element_type.ELEMENT_TYPE_SCENE_BDD_MATERIAUX:
-                            for data in ui.element(database[0]).childs():
-                                matId=data[0]
+                            matId=database[0]
         else:
             print("Incorrect Scene ID")
     return matId, surfacesId
@@ -102,9 +101,12 @@ def getAreas(surfacesId):
 def getMaterials(matsId): # get the list of all materials related to the project
     # chose material from database for each surface
     # if element type is ELEMENT_TYPE_SCENE_BDD_MATERIAUX_APP, ELEMENT_TYPE_SCENE_BDD_MATERIAUX_USER
-    for materials in (ui.element(matsId).childs()):
+    userMats=[]
+    appMats=[]
+    for materials in ui.element(matsId).childs():
         if materials[1] == ui.element_type.ELEMENT_TYPE_SCENE_BDD_MATERIAUX_APP:
-            pass
+            for material in ui.element(materials[0]).childs():
+                appMats.append(material)
         elif materials[1] == ui.element_type.ELEMENT_TYPE_SCENE_BDD_MATERIAUX_USER:
             pass
     return 0
