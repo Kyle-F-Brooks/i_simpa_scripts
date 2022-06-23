@@ -105,8 +105,14 @@ def getMaterials(matsId): # get the list of all materials related to the project
     appMats=[]
     for materials in ui.element(matsId).childs():
         if materials[1] == ui.element_type.ELEMENT_TYPE_SCENE_BDD_MATERIAUX_APP:
-            for material in ui.element(materials[0]).childs():
-                appMats.append(material)
+            for materialGroup in ui.element(materials[0]).childs():
+                for material in ui.element(materialGroup[0]).childs():
+                    matName=material[2]
+                    matAbsorp=[]
+                    for attribute in ui.element(material[0]).childs():
+                        if attribute[1]==ui.element_type.ELEMENT_TYPE_MATERIAU_APP:
+                            for freq in ui.element(attribute[0]).childs():
+                                matAbsorp.append(ui.element(freq[0]).getdecimalconfig("absorb"))
         elif materials[1] == ui.element_type.ELEMENT_TYPE_SCENE_BDD_MATERIAUX_USER:
             for materialGroup in ui.element(materials[0]).childs():
                 for material in ui.element(materialGroup[0]).childs():
