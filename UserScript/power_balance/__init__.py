@@ -2,11 +2,13 @@
 # Created: 24/05/2022
 # Description: Script to calculate the power balance
 
+from ast import Pass
 import uictrl as ui
 from libsimpa import *
 from core_functions import *
 import math
 
+print("In order to run the power balance calculation,\n each surface needs to be right clicked and copied.")
 def calcPowerBalance(excitationSPL, areas, projArea, materials, lf, qff):
     # materials is an array of array of material stl has to be same length as areas
     H=0.000000000001
@@ -69,21 +71,24 @@ def calcPowerBalance(excitationSPL, areas, projArea, materials, lf, qff):
 def getIds(sceneId):
     matId=0 # ID of the "Materials" item in "Project" tree
     surfacesId=0 # ID of the "Surfaces" item in "Data" tree
+    exists=False # check if elements exist
     for treeItem in ui.element(sceneId).childs(): # for each item in "Scene" Tree
         # Surface
         if treeItem[1]==ui.element_type.ELEMENT_TYPE_SCENE_DONNEES: # if element type Data
+            exists=True
             for data in ui.element(treeItem[0]).childs(): # for each time in data tree
                 if data[1]==ui.element_type.ELEMENT_TYPE_SCENE_GROUPESURFACES: # if element type is group of surfaces
                     surfacesId=data[0] # store the ID of surfaces item
         # Materials
         elif treeItem[1]==ui.element_type.ELEMENT_TYPE_SCENE_PROJET: # if element type project
+            exists=True
             for project in ui.element(treeItem[0]).childs(): # for each item in project tree
                 if project[1]==ui.element_type.ELEMENT_TYPE_SCENE_BDD: # if the item is element type bdd(project database)
                     for database in ui.element(project[0]).childs(): # for each item in project database
                         if database[1]==ui.element_type.ELEMENT_TYPE_SCENE_BDD_MATERIAUX: # if item is element "Materials"
                             matId=database[0] # store the ID of materials item
-        else:
-            print("Incorrect Scene ID")
+        elif not exists: # if elements do not exist, the wrong value has been input
+            print("Incorrect Scene ID\nRight click on Project or Data in the Scene window")
     return matId, surfacesId
 
 def getAreas(surfacesId):
@@ -98,57 +103,77 @@ def getAreas(surfacesId):
             areas.append(area)
     return areas, surfaceNames
 
-# function needs fixing. check for material or group type. for material in group append the group name to material name, stops multiples issue
-def getMaterials(matsId): # get the list of all materials related to the project
-    # chose material from database for each surface
-    # if element type is ELEMENT_TYPE_SCENE_BDD_MATERIAUX_APP, ELEMENT_TYPE_SCENE_BDD_MATERIAUX_USER
-
-    #add checks for use of groups or material
-    userMats=[]
-    appMats=[]
-    matNames=[]
-    for materials in ui.element(matsId).childs():
-        if materials[1] == ui.element_type.ELEMENT_TYPE_SCENE_BDD_MATERIAUX_APP:
-            for materialGroup in ui.element(materials[0]).childs():
-                for material in ui.element(materialGroup[0]).childs():
-                    matName=material[2]
+def getMaterials(matsId):
+    materials=[]
+    materialNames=[]
+    for materialsGroups in ui.element(matsId).childs():
+        if materialsGroups[1]==ui.element_type.ELEMENT_TYPE_SCENE_BDD_MATERIAUX_APP:
+            for materialGroup in ui.element(materialsGroups[0]).childs():
+                if materialGroup[1]==ui.element_type.ELEMENT_TYPE_SCENE_BDD_MATERIAUX_APP_GROUP:
+                    for material in ui.element(materialGroup[0]).childs():
+                        matName=material[2] + " " + materialGroup[2]
+                        materialNames.append(matName)
+                        matAbsorp=[]
+                        for property in ui.element(material[0]).childs():
+                            if property[1]==ui.element_type.ELEMENT_TYPE_MATERIAU_APP:
+                                for frequency in ui.element(property[0]).childs():
+                                    matAbsorp.append(ui.element(frequency[0]).getdecimalconfig("absorb"))
+                        matAbsorp.insert(0,matName)
+                        materials.append(matAbsorp)
+                elif materialGroup[1]==ui.element_type.ELEMENT_TYPE_SCENE_BDD_MATERIAUX_APP_MATERIAU:
+                    matName=materialGroup[2]+" "+materialsGroups[2]
+                    materialNames.append(matName)
                     matAbsorp=[]
-                    for attribute in ui.element(material[0]).childs():
-                        if attribute[1]==ui.element_type.ELEMENT_TYPE_ROW_MATERIAU:
-                            for freq in ui.element(attribute[0]).childs():
-                                matAbsorp.append(ui.element(freq[0]).getdecimalconfig("absorb"))
-                    matAbsorp.insert(0,matName)
-                    matNames.append(matName)
-        elif materials[1] == ui.element_type.ELEMENT_TYPE_SCENE_BDD_MATERIAUX_USER:
-            for materialGroup in ui.element(materials[0]).childs():
-                for material in ui.element(materialGroup[0]).childs():
-                    matName=material[2]
+                    for property in ui.element(materialGroup[0]).childs():
+                        if property[1]==ui.element_type.ELEMENT_TYPE_MATERIAU_APP:
+                            for frequency in ui.element(property[0]).childs():
+                                matAbsorp.append(ui.element(frequency[0]).getdecimalconfig("absorb"))
+                    matAbsorp.insert(0, matName)
+                    materials.append(matAbsorp)
+        elif materialsGroups[1]==ui.element_type.ELEMENT_TYPE_SCENE_BDD_MATERIAUX_USER:
+            for materialGroup in ui.element(materialsGroups[0]).childs():
+                if materialGroup[1]==ui.element_type.ELEMENT_TYPE_SCENE_BDD_MATERIAUX_USER_GROUP:
+                    for material in ui.element(materialGroup[0]).childs():
+                        matName=material[2]+" "+materialGroup[2]
+                        materialNames.append(matName)
+                        matAbsorp=[]
+                        for property in ui.element(materialGroup[0]).childs():
+                            if property[1]==ui.element_type.ELEMENT_TYPE_MATERIAU_USER:
+                                for frequency in ui.element(property[0]).childs():
+                                    matAbsorp.append(ui.element(frequency[0]).getdecimalconfig("absorb"))
+                        matAbsorp.insert(0,matName)
+                        materials.append(matAbsorp)
+                elif materialGroup[1]==ui.element_type.ELEMENT_TYPE_SCENE_BDD_MATERIAUX_USER_MATERIAU:
+                    matName=materialGroup[2]+" "+materialsGroups[2]
+                    materialNames.append(matName)
                     matAbsorp=[]
-                    for attribute in ui.element(material[0]).childs():
-                        if attribute[1]==ui.element_type.ELEMENT_TYPE_ROW_MATERIAU:
-                            for freq in ui.element(attribute[0]).childs():
-                                matAbsorp.append(ui.element(freq[0]).getdecimalconfig("absorb"))
-                    matAbsorp.insert(0,matName)
-                    matNames.append(matName)
-                    userMats.append(matAbsorp)
-    return userMats, appMats, matNames
+                    for property in ui.element(materialGroup[0]).childs():
+                        if property[1]==ui.element_type.ELEMENT_TYPE_MATERIAU_USER:
+                            for frequency in ui.element(property[0]).childs():
+                                matAbsorp.append(ui.element(frequency[0]).getdecimalconfig("absorb"))
+                    matAbsorp.insert(0, matName)
+                    materials.append(matAbsorp)
 
 def createSurfMatDict(matNames, surfaces):
     # dict structure {"surface name": [materialNames], "surface name": [materialNames], "surface name": [materialNames]}
     linkingDict={}
     for surface in surfaces:
-        # need to find a better method for this
-        if surface in linkingDict:
-            newName=surface + " 1"
-            if newName in linkingDict:
-                newName=surface+" 2"
-                linkingDict[newName]=matNames
-            else:
-                linkingDict[newName]=matNames
-        else:
-            linkingDict[surface]=matNames
+        linkingDict[surface]=matNames
     return linkingDict
-    
+
+def getRecData(recName, punctualId):
+    recData=[] # empty array
+    for folder in ui.element(punctualId).childs(): # for each folder in "punctual receivers"
+        if folder[2]=="Fused Receivers": # if folder named "Fused Receivers"
+            for file in ui.element(folder[0]).childs(): # for each file in "Fused Receivers" folder
+                if file[1]==ui.element_type.ELEMENT_TYPE_REPORT_GABE: # if type is gabe report
+                    document=ui.e_file(file[0]) # create readabel element from id numbers
+                    if document.getinfos()["name"]=="fusionSPL": # check name is "fusionSPL"
+                        for row in ui.application.getdataarray(document): # for each row in file "fusionSPL"
+                            if row[0]==recName: # if the column is the name of the chosen rec
+                                recData=row[1:-2] # set recData equal to row with global and average vals removed
+    return recData # return the now filled array
+
 class manager:
     def __init__(self):
         self.calcPowerBalanceId=ui.application.register_event(self.runCalculation)
@@ -181,10 +206,13 @@ class manager:
         if userInput1[0]: # if the ui "OK" Button is pressed
             matId, surfacesId = getIds(userInput1[1]["Scene ID"]) # call function to get the ID of material folder and surfaces folder
             excRecName=userInput1[1]["Excitation"] # set chosen excitation mic
-            excitationSPL=[] # CREATE FUNCTION TO GET REC DATA
+            excitationSPL=getRecData(excRecName,punctualId) # get data array of excitation reciever
             qff,lf=GetBothCorrection(sppsId,solveId) # get the correction data
             areas,surfaceNames=getAreas(surfacesId) # areas format [[][][][]] names = []
             projArea=0 # have projected area be input by the user
+            '''
+            this function needs to be fixed to append the name of the material group
+            '''
             materials=getMaterials(matId) # materials format [[[],[],[],[],[]],[[],[],[],[],[]]]
             # Next ui, link surface name to material name
             choiceDict=createSurfMatDict(materials[2]) # Create dict item to display vals in next ui
