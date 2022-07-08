@@ -24,34 +24,40 @@ def getRecData(recName, punctualId):
 
 def calcPowerBalance(excitationSPL, areas, projArea, materials, lf, qff):
     # materials is an array of array of material stl has to be same length as areas
-    H=0.000000000001
+    H=0.000000000001 # 1e -12
+    # calculate excitation intensity in watts
     excitationIntensityW=[]
+    excitationSTL=[]
     for freq in excitationSPL:
-        intesnsityDb=float(freq)-6
-        excitationIntensityW.append((math.pow(10, (intesnsityDb/10))*H))
+        intesnsityDb=float(freq)-6# correct math
+        excitationSTL.append(intesnsityDb)
+        excitationIntensityW.append((math.pow(10, (intesnsityDb/10))*H)) # correct math
+    # calculate adjacent powers
     adjacentPowersW=[]
     adjacentPowersdB=[]
     totalArea=0
     for surface, area in areas.items():
         adjacentPowerW=[]
         adjacentPowerdB=[]
-        #area name may need removing
-        for freq in excitationIntensityW:
-            excInt=freq*float(area)
+        for intens in excitationIntensityW:
+            excInt=intens*float(area)
             adjacentPowerW.append(excInt)
             adjacentPowerdB.append((10*math.log10((excInt/H))))
         adjacentPowersW.append(adjacentPowerW)
         adjacentPowersdB.append(adjacentPowerdB)
         totalArea+=float(area)
-    totalPower=[]
+    # Calculate total power in
+    totalPowerIn=[]
     for freq in excitationIntensityW:
-        totalPower.append(freq*totalArea)
+        totalPowerIn.append(freq*totalArea)
+    # add the qff to the materials
     materialsQff=[]
     for surface, material in materials.items():
         materialQff=[]
         for k,v in enumerate(material):
             materialQff.append(v+qff[k])
         materialsQff.append(materialQff)
+    # calc radiated power
     radiatedPowersdB=[]
     radiatedPowersW=[]
     for k1,v1 in enumerate(adjacentPowersdB):
@@ -64,23 +70,29 @@ def calcPowerBalance(excitationSPL, areas, projArea, materials, lf, qff):
             radiatedPowerW.append(rPw)
         radiatedPowersdB.append(radiatedPowerdB)
         radiatedPowersW.append(radiatedPowerW)
+    # calc total power out
     totalPowerW=[]
     totalPowerdB=[]
     for k1,v1 in enumerate(radiatedPowersW):
-        for k2, v2 in enumerate(v1):
-            totalPowerW[k2]+=v2
-    for watt in totalPowerdB:
+        if k1 == 0:
+            totalPowerW=v1
+        else:
+            for k2, v2 in enumerate(v1):
+                totalPowerW[k2]+=v2
+    for watt in totalPowerW:
         totalPowerdB.append(10*math.log10(watt/H))
+    # calc projected Intensity
     projIntensity=[]
-    for intensity in totalPowerdB:
-        projIntensity.append(10*math.log10((intensity/projArea)/H))
+    for watt in totalPowerW:
+        projIntensity.append(10*math.log10((watt/projArea)/H))
+    # calc overall Transmission loss
     overallTransmissionLoss=[]
     for k,v in enumerate(projIntensity):
-        overallTransmissionLoss.append(excitationSPL[k]-v)
+        overallTransmissionLoss.append(excitationSTL[k]-v)
     overallTLLF=[]
     for k,v in enumerate(overallTransmissionLoss):
         overallTLLF.append(lf[k]+v)
-    return overallTransmissionLoss, overallTLLF, projIntensity, totalPowerdB, totalPowerW
+    return overallTransmissionLoss, overallTLLF, projIntensity, totalPowerdB, totalPowerW, totalPowerIn
 
 def getIds(sceneId):
     matId=0 # ID of the "Materials" item in "Project" tree
@@ -135,7 +147,7 @@ def getMaterials(matsId):
                                     for property in ui.element(mat[0]).childs(): # for each property of material
                                         if property[1]==ui.element_type.ELEMENT_TYPE_MATERIAU_APP: # if property is material spectrum
                                             for frequency in ui.element(property[0]).childs(): # for each frequency of material
-                                                matAbsorp.append(round(ui.element(frequency[0]).getdecimalconfig("absorb"),4)) # append the absorption value to array
+                                                matAbsorp.append(round(ui.element(frequency[0]).getdecimalconfig("affaiblissement"),4)) # append the absorption value to array
                                     matAbsorp.insert(0,matName) # insert name of material to beginning of array for later sorting
                                     materials.append(matAbsorp) # append the material data to the materials array
                         elif material[1]==ui.element_type.ELEMENT_TYPE_SCENE_BDD_MATERIAUX_APP_MATERIAU:
@@ -146,7 +158,7 @@ def getMaterials(matsId):
                             for property in ui.element(materialGroup[0]).childs():
                                 if property[1]==ui.element_type.ELEMENT_TYPE_MATERIAU_APP:
                                     for frequency in ui.element(property[0]).childs():
-                                        matAbsorp.append(round(ui.element(frequency[0]).getdecimalconfig("absorb"),4))
+                                        matAbsorp.append(round(ui.element(frequency[0]).getdecimalconfig("affaiblissement"),4))
                             matAbsorp.insert(0, matName)
                             materials.append(matAbsorp)
                 elif materialGroup[1]==ui.element_type.ELEMENT_TYPE_SCENE_BDD_MATERIAUX_APP_MATERIAU: # if element is a material
@@ -157,7 +169,7 @@ def getMaterials(matsId):
                     for property in ui.element(materialGroup[0]).childs():
                         if property[1]==ui.element_type.ELEMENT_TYPE_MATERIAU_APP:
                             for frequency in ui.element(property[0]).childs():
-                                matAbsorp.append(round(ui.element(frequency[0]).getdecimalconfig("absorb"),4))
+                                matAbsorp.append(round(ui.element(frequency[0]).getdecimalconfig("affaiblissement"),4))
                     matAbsorp.insert(0, matName)
                     materials.append(matAbsorp)
         elif materialsGroups[1]==ui.element_type.ELEMENT_TYPE_SCENE_BDD_MATERIAUX_USER: # if group is generated by the user
@@ -170,7 +182,7 @@ def getMaterials(matsId):
                         for property in ui.element(material[0]).childs(): # for each property of material
                             if property[1]==ui.element_type.ELEMENT_TYPE_MATERIAU_USER: # if property is material spectrum
                                 for frequency in ui.element(property[0]).childs(): # for each frequency of material
-                                    matAbsorp.append(round(ui.element(frequency[0]).getdecimalconfig("absorb"),4)) # append the absorption value to array
+                                    matAbsorp.append(round(ui.element(frequency[0]).getdecimalconfig("affaiblissement"),4)) # append the absorption value to array
                         matAbsorp.insert(0,matName) # insert name of material o beginningg of array for later sorting
                         materials.append(matAbsorp) # append the material data to the materials array
                 elif materialGroup[1]==ui.element_type.ELEMENT_TYPE_SCENE_BDD_MATERIAUX_USER_MATERIAU: # if element is a material
@@ -181,7 +193,7 @@ def getMaterials(matsId):
                     for property in ui.element(material[0]).childs():
                         if property[1]==ui.element_type.ELEMENT_TYPE_MATERIAU_USER:
                             for frequency in ui.element(property[0]).childs():
-                                matAbsorp.append(round(ui.element(frequency[0]).getdecimalconfig("absorb"),4))
+                                matAbsorp.append(round(ui.element(frequency[0]).getdecimalconfig("affaiblissement"),4))
                     matAbsorp.insert(0, matName)
                     materials.append(matAbsorp)
     return materials, materialNames
@@ -204,6 +216,12 @@ def selectMaterials(materials, choices):
                 dataDict[key]=material[4:-3] # trim material name and set freq to 100Hz-10000Hz
         # Key: Surface Name
         # Value: Material Name
+    return dataDict
+
+def createSurfaceChoice(surfaceNames):
+    dataDict={}
+    for surfaceName in surfaceNames:
+        dataDict[surfaceName]=["Yes", "No"]
     return dataDict
 
 class manager:
@@ -234,35 +252,26 @@ class manager:
         uiTitle="Power Balance Calculator" # ui titie
         names=getNames(punctualId) # call function to get names of recievers
         # display ui where the user picks the excitation reciever and inputs the ID number of the scene ID
-        userInput1=ui.application.getuserinput(uiTitle, "Pick the excitation Receiver", {"Excitation": names,"Scene ID":"0", "Projected Area":"0"})
-        if userInput1[0]: # if the ui "OK" Button is pressed
-            matId, surfacesId = getIds(int(userInput1[1]["Scene ID"])) # call function to get the ID of material folder and surfaces folder
-            excRecName=userInput1[1]["Excitation"] # set chosen excitation mic
+        userInput0=ui.application.getuserinput(uiTitle, "Pick the excitation Receiver", {"Excitation": names,"Scene ID":"0", "Projected Area":"0"})
+        if userInput0[0]: # if the ui "OK" Button is pressed
+            matId, surfacesId = getIds(int(userInput0[1]["Scene ID"])) # call function to get the ID of material folder and surfaces folder
+            excRecName=userInput0[1]["Excitation"] # set chosen excitation mic
             excitationSPL=getRecData(excRecName,punctualId) # get data array of excitation reciever
             qff,lf=GetBothCorrection(sppsId,solveId) # get the correction data
             areas,surfaceNames=getAreas(surfacesId) # areas format [[][][][]] names = []
-            projArea=float(userInput1[1]["Projected Area"]) # have projected area be input by the user
-            materials,materialsNames=getMaterials(matId) # materials format [[],[],[],[],[]]
-            choiceDict=createSurfMatDict(materialsNames,surfaceNames) # Create dict item to display vals in next ui
-            # display second ui menu that gives each surface and the user attaces the chosen material to link to the surface
-            userInput2=ui.application.getuserinput(uiTitle, "Select Material\nfor each surface.", choiceDict)
-            if userInput2[0]: # if the ui "OK" button is pressed
-                # Results to save
-                print(materials)
-                chosenMaterials=selectMaterials(materials,userInput2[1])
-                print(chosenMaterials)
-                # overallTransmissionLoss, overallTLLF, projIntensity, totalPowerdB, totalPowerW=calcPowerBalance(excitationSPL,areas,projArea,chosenMaterials,lf,qff)
-                # print(overallTransmissionLoss)
-                # print("\n")
-                # print(overallTLLF)
-                # print("\n")
-                # print(projIntensity)
-                # print("\n")
-                # print(totalPowerdB)
-                # print("\n")
-                # print(totalPowerW)
-                # print("\n")
-                # use the save function from "core_functions.py"
+            projArea=float(userInput0[1]["Projected Area"]) # have projected area be input by the user
+            surfaceChoice=createSurfaceChoice(surfaceNames)
+            userInput1=ui.application.getuserinput(uiTitle,"Pick surfaces for model", surfaceChoice)
+            if userInput1[0]:
+                materials,materialsNames=getMaterials(matId) # materials format [[],[],[],[],[]]
+                choiceDict=createSurfMatDict(materialsNames,surfaceNames) # Create dict item to display vals in next ui
+                # display second ui menu that gives each surface and the user attaces the chosen material to link to the surface
+                userInput2=ui.application.getuserinput(uiTitle, "Select Material\nfor each surface.", choiceDict)
+                if userInput2[0]: # if the ui "OK" button is pressed
+                    # Results to save
+                    chosenMaterials=selectMaterials(materials,userInput2[1])
+                    overallTransmissionLoss, overallTLLF, projIntensity, totalPowerdB, totalPowerW=calcPowerBalance(excitationSPL,areas,projArea,chosenMaterials,lf,qff)
+                    # use the save function from "core_functions.py"
 
 
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_REPORT_FOLDER, manager()) # alter here based on menu location
