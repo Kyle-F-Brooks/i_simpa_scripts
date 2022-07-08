@@ -224,6 +224,17 @@ def createSurfaceChoice(surfaceNames):
         dataDict[surfaceName]=["Yes", "No"]
     return dataDict
 
+def selectSurfaces(surfaceDict, areas):
+    selectedSurfaces=[]
+    selectedAreas={}
+    for surface, answer in surfaceDict.items():
+        if answer=="Yes":
+            selectedSurfaces.append(surface)
+    for surface, area in areas.items():
+        if surface in selectedSurfaces:
+            selectedAreas[surface]=area
+    return selectedSurfaces, selectedAreas
+
 class manager:
     def __init__(self):
         self.calcPowerBalanceId=ui.application.register_event(self.runCalculation)
@@ -258,19 +269,20 @@ class manager:
             excRecName=userInput0[1]["Excitation"] # set chosen excitation mic
             excitationSPL=getRecData(excRecName,punctualId) # get data array of excitation reciever
             qff,lf=GetBothCorrection(sppsId,solveId) # get the correction data
-            areas,surfaceNames=getAreas(surfacesId) # areas format [[][][][]] names = []
+            allAreas,surfaceNames=getAreas(surfacesId) # areas format [[][][][]] names = []
             projArea=float(userInput0[1]["Projected Area"]) # have projected area be input by the user
             surfaceChoice=createSurfaceChoice(surfaceNames)
             userInput1=ui.application.getuserinput(uiTitle,"Pick surfaces for model", surfaceChoice)
             if userInput1[0]:
                 materials,materialsNames=getMaterials(matId) # materials format [[],[],[],[],[]]
-                choiceDict=createSurfMatDict(materialsNames,surfaceNames) # Create dict item to display vals in next ui
+                selectedSurfaces, selectedArea=selectSurfaces(userInput1[1], allAreas)
+                choiceDict=createSurfMatDict(materialsNames,selectedSurfaces) # Create dict item to display vals in next ui
                 # display second ui menu that gives each surface and the user attaces the chosen material to link to the surface
                 userInput2=ui.application.getuserinput(uiTitle, "Select Material\nfor each surface.", choiceDict)
                 if userInput2[0]: # if the ui "OK" button is pressed
                     # Results to save
                     chosenMaterials=selectMaterials(materials,userInput2[1])
-                    overallTransmissionLoss, overallTLLF, projIntensity, totalPowerdB, totalPowerW=calcPowerBalance(excitationSPL,areas,projArea,chosenMaterials,lf,qff)
+                    overallTransmissionLoss, overallTLLF, projIntensity, totalPowerdB, totalPowerW=calcPowerBalance(excitationSPL,selectedArea,projArea,chosenMaterials,lf,qff)
                     # use the save function from "core_functions.py"
 
 
