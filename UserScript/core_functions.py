@@ -54,13 +54,14 @@ def GetQFFCorrection(solveElementId):
     return qff
     
 def GetBothCorrection(sppsElementId,solveElementId):
-    qff=[]
-    lf=[]
+    qff=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    lf=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     sppsFolder=ui.element(sppsElementId)
     for files in sppsFolder.childs():
         if files[1]==ui.element_type.ELEMENT_TYPE_REPORT_GABE:
             lfDocument=ui.e_file(files[0])
             if lfDocument.getinfos()["name"]=="LF_Correction":
+                lf=[]
                 gridparam=ui.application.getdataarray(lfDocument)
                 for row in gridparam:
                     if row[0]=='':
@@ -72,6 +73,7 @@ def GetBothCorrection(sppsElementId,solveElementId):
         if files[1]==ui.element_type.ELEMENT_TYPE_REPORT_GABE:
             qffDocument=ui.e_file(files[0])
             if qffDocument.getinfos()["name"]=="QFF_Correction":
+                qff=[]
                 gridparam=ui.application.getdataarray(qffDocument)
                 for row in gridparam:
                     if row[0]=='':
