@@ -110,7 +110,7 @@ class manager:
                             absPercent=calcPercentageAbs(float(areaData["Cabin Area"]),sampleData)
                             sampleData.insert(0,"Sabine")
                             absPercent.insert(0,"Absorption %")
-                            saveData=[freq,sampleData,absPercent]
+                            saveData=[freq,absPercent,sampleData]
                             SaveFile(zip(*saveData),grp.buildfullpath()+r"Bare Cabin Absorption.gabe")
                         except:
                             print("Error while calculating bare absorption")

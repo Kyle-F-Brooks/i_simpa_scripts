@@ -6,22 +6,6 @@ from libsimpa import *
 from core_functions import *
 import os
 
-# this function works
-def getNames(elementId):
-    # if using the fusion files, it may not be needed to get the receiver element dicts.
-    receivers=[] # array of receiver element dicts
-    names=[] # array of receiver names
-    folder=ui.element(elementId) # set folder
-    recplist=folder.getallelementbytype(ui.element_type.ELEMENT_TYPE_REPORT_FOLDER) # get all folders in folder
-    for idrecp in recplist: # for each folder get info
-        recp=ui.element(idrecp)
-        infos=recp.getinfos()
-        if infos["label"]!="Fused Receivers" and infos["label"]!="Source Contributions" and infos["label"]!="XYZ Plots" and infos["label"]!="Transmission Loss": # if receiver folder append to array receivers 
-            receivers.append(infos)
-    for receiver in receivers: # for each stored receiver append "label property to array names"
-        names.append(receiver["label"])
-    return names
-
 # This function works
 def getVals(elementId, recid):
     receivers=[]

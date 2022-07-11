@@ -5,7 +5,7 @@ Modified Scripts: convert_all_tool, recp_res_tool, source_tools, libsimpa
 
 Custom Scripts: plot_xyz, stl_calc, absorption_calc
 
-Please check my other repositories for the python 2 scripts
+Please check [here](https://github.com/Kyle-F-Brooks/i_simpa_python2) for the python 2 scripts. The python 2 scripts do not cover as many features as in python 3
 
 Test scripts have been moved to a seperate branch
 ## Description
@@ -59,8 +59,3 @@ calculates the power balance based on the area, the projected area and the sourc
 
 ## core_functions (WIP)
 a collection of functions that are used repeatedly by other scrzipts.
-
-### Possible Features
-* STL Hologram
-* Store and return to set camera positions
-* Custom Material Import: CATT Acoustic/li8 Odeon
