@@ -94,7 +94,7 @@ def calcPowerBalance(excitationSPL, areas, projArea, materials, lf, qff):
     overallTLLF.insert(0,"TL plus LF")
     projIntensity.insert(0,"Projected Intensity")
     totalPowerdB.insert(0, "Power Out (dB)")
-    return overallTransmissionLoss, overallTLLF, projIntensity, totalPowerdB
+    return overallTransmissionLoss, overallTLLF, projIntensity, totalPowerdB, radiatedPowersdB
 
 def getIds(sceneId):
     matId=0 # ID of the "Materials" item in "Project" tree
@@ -245,6 +245,14 @@ def createMaterialSave(surfaceMatDict, areaDict):
         saveData.append(join)
     return saveData
 
+def sortRadiatedPowers(zonePowers, areasDict):
+    sortedPowers=[]
+    surfaces=list(areasDict.keys())
+    for k,zone in enumerate(zonePowers):
+        zone.insert(0,surfaces[k])
+        sortedPowers.append(zone)
+    return sortedPowers
+
 class manager:
     def __init__(self):
         self.calcPowerBalanceId=ui.application.register_event(self.runCalculation)
@@ -292,12 +300,16 @@ class manager:
                 if userInput2[0]: # if the ui "OK" button is pressed
                     # Results to save
                     chosenMaterials=selectMaterials(materials,userInput2[1])
-                    overallTransmissionLoss, overallTLLF, projIntensity, totalPowerdB=calcPowerBalance(excitationSPL,selectedArea,projArea,chosenMaterials,lf,qff)
+                    overallTransmissionLoss, overallTLLF, projIntensity, totalPowerdB, zonePowers=calcPowerBalance(excitationSPL,selectedArea,projArea,chosenMaterials,lf,qff)
                     freq=('','100 Hz','125 Hz','160 Hz','200 Hz','250 Hz','315 Hz','400 Hz','500 Hz','630 Hz','800 Hz','1000 Hz','1250 Hz','1600 Hz','2000 Hz','2500 Hz','3150 Hz','4000 Hz','5000 Hz','6300 Hz','8000 Hz','10000 Hz')
                     savePowerBal=[freq, totalPowerdB, projIntensity, overallTransmissionLoss,overallTLLF]
                     powerbalpath=ui.e_file(solveId).buildfullpath()+"Power_Balance.gabe"
+                    zonepowpath=ui.e_file(solveId).buildfullpath()+"Zone_Powers.gabe"
                     materialchoicepath=ui.e_file(solveId).buildfullpath()+"Surface_Material_Choice.csv" # un-used path for saving material choice
-                    saveMaterial=createMaterialSave(userInput2[1], selectedArea) # can't save this to gabe 
+                    saveMaterial=createMaterialSave(userInput2[1], selectedArea)
+                    saveZonePowers=sortRadiatedPowers(zonePowers, selectedArea)
+                    saveZonePowers.insert(0,freq)
+                    SaveFile(zip(*saveZonePowers), zonepowpath)
                     SaveFile(zip(*savePowerBal),powerbalpath)
                     with open(materialchoicepath.encode('cp1252'),'w',newline='') as csvfile:
                         write=csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
