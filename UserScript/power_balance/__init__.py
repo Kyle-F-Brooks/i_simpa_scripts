@@ -47,9 +47,6 @@ def calcPowerBalance(excitationSPL, areas, projArea, materials, lf, qff):
         adjacentPowersdB.append(adjacentPowerdB)
         totalArea+=float(area)
     # Calculate total power in
-    totalPowerIn=[]
-    for freq in excitationIntensityW:
-        totalPowerIn.append(freq*totalArea)
     # add the qff to the materials
     materialsQff=[]
     for surface, material in materials.items():
@@ -92,7 +89,11 @@ def calcPowerBalance(excitationSPL, areas, projArea, materials, lf, qff):
     overallTLLF=[]
     for k,v in enumerate(overallTransmissionLoss):
         overallTLLF.append(lf[k]+v)
-    return overallTransmissionLoss, overallTLLF, projIntensity, totalPowerdB, totalPowerW, totalPowerIn
+    overallTransmissionLoss.insert(0,"Transmission Loss")
+    overallTLLF.insert(0,"TL plus LF")
+    projIntensity.insert(0,"Projected Intensity")
+    totalPowerdB.insert(0, "Power Out (dB)")
+    return overallTransmissionLoss, overallTLLF, projIntensity, totalPowerdB
 
 def getIds(sceneId):
     matId=0 # ID of the "Materials" item in "Project" tree
@@ -282,9 +283,14 @@ class manager:
                 if userInput2[0]: # if the ui "OK" button is pressed
                     # Results to save
                     chosenMaterials=selectMaterials(materials,userInput2[1])
-                    overallTransmissionLoss, overallTLLF, projIntensity, totalPowerdB, totalPowerW=calcPowerBalance(excitationSPL,selectedArea,projArea,chosenMaterials,lf,qff)
+                    overallTransmissionLoss, overallTLLF, projIntensity, totalPowerdB=calcPowerBalance(excitationSPL,selectedArea,projArea,chosenMaterials,lf,qff)
+                    freq=('','100 Hz','125 Hz','160 Hz','200 Hz','250 Hz','315 Hz','400 Hz','500 Hz','630 Hz','800 Hz','1000 Hz','1250 Hz','1600 Hz','2000 Hz','2500 Hz','3150 Hz','4000 Hz','5000 Hz','6300 Hz','8000 Hz','10000 Hz')
+                    savePowerBal=[freq, totalPowerdB, projIntensity, overallTransmissionLoss,overallTLLF]
+                    powerbalpath=ui.e_file(solveId).buildfullpath()+"Power_Balance.gabe"
+                    materialchoicepath=ui.e_file(solveId).buildfullpath()+"Surface_Material_Choice.gabe"
+                    SaveFile(zip(*savePowerBal),powerbalpath)
                     # use the save function from "core_functions.py"
-
+                    ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
 
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_REPORT_FOLDER, manager()) # alter here based on menu location
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_DONNEES,manager()) # show on "Data" in scene
