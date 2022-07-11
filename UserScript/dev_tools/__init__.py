@@ -6,6 +6,8 @@ import uictrl as ui
 from libsimpa import *
 from core_functions import *
 
+print("\nDev Tools Enabled\n")
+
 class manager:
     def __init__(self):
         self.showEl=ui.application.register_event(self.showId)
@@ -21,11 +23,11 @@ class manager:
         infos=ui.element(elementId).getinfos()
         print(ui.element(infos["parentid"]).getinfos())
 
-# ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_REPORT_FOLDER, manager())
-# ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_ROOT,manager())
-# ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_GROUPESURFACES,manager())
-# ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_RECEPTEURSP,manager())
-# ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_BDD_MATERIAUX, manager())
+ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_REPORT_FOLDER, manager())
+ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_ROOT,manager())
+ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_GROUPESURFACES,manager())
+ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_RECEPTEURSP,manager())
+ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_BDD_MATERIAUX, manager())
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_DONNEES,manager())
 ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE_PROJET,manager())
 # ui.application.register_menu_manager(ui.element_type.ELEMENT_TYPE_SCENE,manager())
