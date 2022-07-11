@@ -6,6 +6,7 @@ import uictrl as ui
 from libsimpa import *
 from core_functions import *
 import math
+import csv
 
 print("\nIn order to run the power balance calculation,\neach surface needs to be right clicked and copied.\n\nRight click on 'Data' or 'Project' to get the scene ID")
 
@@ -236,6 +237,13 @@ def selectSurfaces(surfaceDict, areas):
             selectedAreas[surface]=area
     return selectedSurfaces, selectedAreas
 
+def createMaterialSave(surfaceMatDict):
+    saveData=[['','Material Used']]
+    for surface, material in surfaceMatDict.items():
+        join=[surface, material]
+        saveData.append(join)
+    return saveData
+
 class manager:
     def __init__(self):
         self.calcPowerBalanceId=ui.application.register_event(self.runCalculation)
@@ -287,8 +295,12 @@ class manager:
                     freq=('','100 Hz','125 Hz','160 Hz','200 Hz','250 Hz','315 Hz','400 Hz','500 Hz','630 Hz','800 Hz','1000 Hz','1250 Hz','1600 Hz','2000 Hz','2500 Hz','3150 Hz','4000 Hz','5000 Hz','6300 Hz','8000 Hz','10000 Hz')
                     savePowerBal=[freq, totalPowerdB, projIntensity, overallTransmissionLoss,overallTLLF]
                     powerbalpath=ui.e_file(solveId).buildfullpath()+"Power_Balance.gabe"
-                    materialchoicepath=ui.e_file(solveId).buildfullpath()+"Surface_Material_Choice.gabe"
+                    materialchoicepath=ui.e_file(solveId).buildfullpath()+"Surface_Material_Choice.csv" # un-used path for saving material choice
+                    saveMaterial=createMaterialSave(userInput2[1]) # can't save this to gabe 
                     SaveFile(zip(*savePowerBal),powerbalpath)
+                    with open(materialchoicepath.encode('cp1252'),'w',newline='') as csvfile:
+                        write=csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                        write.writerows(saveMaterial)
                     # use the save function from "core_functions.py"
                     ui.application.sendevent(ui.element(ui.element(ui.application.getrootreport()).childs()[0][0]),ui.idevent.IDEVENT_RELOAD_FOLDER)
 
